@@ -20,7 +20,16 @@
 
 import Route from '@ioc:Adonis/Core/Route';
 
+// AUTH
 Route.post('/login', 'AuthController.login');
 
-Route.get('/people', 'peopleController.index');
-Route.post('/person', 'peoleController.store');
+// USER
+Route.post('/user', 'UsersController.store');
+
+// PERSON
+Route.get('/people', 'PeopleController.index');
+Route.post('/person', 'PeoleController.store');
+
+// MOVIE
+Route.get('/movie', 'MoviesController.index');
+Route.post('/movie', 'MoviesController.store');
