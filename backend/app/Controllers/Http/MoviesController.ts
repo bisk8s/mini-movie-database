@@ -15,7 +15,8 @@ export default class MoviesController {
       .preload('directors');
     return all;
   }
-  public async store({ request }: HttpContextContract) {
+  public async store({ request, auth }: HttpContextContract) {
+    await auth.authenticate();
     const data = request.only([
       'title',
       'releaseYear',
@@ -23,11 +24,11 @@ export default class MoviesController {
       'producers',
       'directors'
     ]);
-    const movie = await Movie.create(data);
+    const movie = await Movie.firstOrCreate(data);
     if (movie) {
       if (data.casting) {
         stringToArray(data.casting).map(personId => {
-          MovieCast.create({
+          MovieCast.firstOrCreate({
             movieId: movie.id,
             personId: parseInt(personId)
           });
@@ -35,7 +36,7 @@ export default class MoviesController {
       }
       if (data.producers) {
         stringToArray(data.producers).map(personId => {
-          MovieProducers.create({
+          MovieProducers.firstOrCreate({
             movieId: movie.id,
             personId: parseInt(personId)
           });
@@ -50,7 +51,6 @@ export default class MoviesController {
         });
       }
     }
-
     return movie;
   }
 }

@@ -25,11 +25,11 @@ export default class PeopleController {
       'moviesAsDirector',
       'moviesAsProducer'
     ]);
-    const person = await Person.create(data);
+    const person = await Person.firstOrCreate(data);
     if (person) {
       if (data.moviesAsActor) {
         stringToArray(data.moviesAsActor).map(movieId => {
-          MovieCast.create({
+          MovieCast.firstOrCreate({
             personId: person.id,
             movieId: parseInt(movieId)
           });
@@ -37,7 +37,7 @@ export default class PeopleController {
       }
       if (data.moviesAsProducer) {
         stringToArray(data.moviesAsProducer).map(movieId => {
-          MovieProducers.create({
+          MovieProducers.firstOrCreate({
             personId: person.id,
             movieId: parseInt(movieId)
           });
@@ -45,7 +45,7 @@ export default class PeopleController {
       }
       if (data.moviesAsDirector) {
         stringToArray(data.moviesAsDirector).map(movieId => {
-          MovieDirectors.create({
+          MovieDirectors.firstOrCreate({
             personId: person.id,
             movieId: parseInt(movieId)
           });
