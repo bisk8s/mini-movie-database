@@ -95,4 +95,11 @@ export default class PeopleController {
     }
     return person;
   }
+  public async remove({ request, auth }: HttpContextContract) {
+    await auth.authenticate();
+    const data = request.only(['id']);
+    const movie = await Person.findOrFail(parseInt(data.id));
+    await movie.delete();
+    return { deletedId: data.id };
+  }
 }

@@ -90,4 +90,11 @@ export default class MoviesController {
     }
     return movie;
   }
+  public async remove({ request, auth }: HttpContextContract) {
+    await auth.authenticate();
+    const data = request.only(['id']);
+    const movie = await Movie.findOrFail(parseInt(data.id));
+    await movie.delete();
+    return { deletedId: data.id };
+  }
 }

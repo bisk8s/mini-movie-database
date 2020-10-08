@@ -28,8 +28,15 @@ Route.post('/user', 'UsersController.store');
 Route.get('/people', 'PeopleController.index');
 Route.post('/person', 'PeopleController.store');
 Route.put('/person', 'PeopleController.update');
+Route.delete('/person', 'PeopleController.remove');
 
 // MOVIE
 Route.get('/movies', 'MoviesController.index');
 Route.post('/movie', 'MoviesController.store');
 Route.put('/movie', 'MoviesController.update');
+Route.delete('/movie', 'MoviesController.remove');
+
+// RELATIONSHIP
+Route.delete('/casting', 'MoviePeopleController.removeCasting');
+Route.delete('/producer', 'MoviePeopleController.removeProducer');
+Route.delete('/director', 'MoviePeopleController.removeDirector');
