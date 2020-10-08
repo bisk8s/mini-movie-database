@@ -28,7 +28,7 @@ Route.post('/user', 'UsersController.store');
 
 // PERSON
 Route.get('/people', 'PeopleController.index');
-Route.post('/person', 'PeoleController.store');
+Route.post('/person', 'PeopleController.store');
 
 // MOVIE
 Route.get('/movie', 'MoviesController.index');

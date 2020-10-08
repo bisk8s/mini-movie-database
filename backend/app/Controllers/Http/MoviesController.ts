@@ -3,7 +3,10 @@ import Movie from 'App/Models/Movie';
 
 export default class MoviesController {
   public async index() {
-    const all = Movie.all();
+    const all = Movie.query()
+      .preload('casting')
+      .preload('directors')
+      .preload('producers');
     return all;
   }
   public async store({ request }: HttpContextContract) {

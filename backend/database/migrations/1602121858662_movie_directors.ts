@@ -1,13 +1,13 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema';
 
-export default class Movies extends BaseSchema {
-  protected tableName = 'movies';
+export default class MovieDirectors extends BaseSchema {
+  protected tableName = 'movie_directors';
 
   public async up() {
     this.schema.createTable(this.tableName, table => {
-      table.increments('id').primary();
-      table.string('title').notNullable();
-      table.integer('release_year').notNullable();
+      table.increments('id');
+      table.integer('movie_id');
+      table.integer('person_id');
       table.timestamps(true);
     });
   }

@@ -1,6 +1,6 @@
-import { DateTime } from "luxon";
-import { BaseModel, column, HasMany, hasMany } from "@ioc:Adonis/Lucid/Orm";
-import Movie from "./Movie";
+import { DateTime } from 'luxon';
+import { BaseModel, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm';
+import Movie from './Movie';
 
 export default class Person extends BaseModel {
   @column({ isPrimary: true })
@@ -12,17 +12,27 @@ export default class Person extends BaseModel {
   @column()
   public firstName: string;
 
-  @column()
+  @column({
+    serialize: (value: string) => {
+      return value.split(',').map(v => v.trim());
+    }
+  })
   public aliases: string[];
 
-  @hasMany(() => Movie)
-  public moviesAsActor: HasMany<typeof Movie>;
+  @manyToMany(() => Movie, {
+    pivotTable: 'movie_cast'
+  })
+  public moviesAsActor: ManyToMany<typeof Movie>;
 
-  @hasMany(() => Movie)
-  public moviesAsDirector: HasMany<typeof Movie>;
+  @manyToMany(() => Movie, {
+    pivotTable: 'movie_directors'
+  })
+  public moviesAsDirector: ManyToMany<typeof Movie>;
 
-  @hasMany(() => Movie)
-  public moviesAsProducer: HasMany<typeof Movie>;
+  @manyToMany(() => Movie, {
+    pivotTable: 'movie_producers'
+  })
+  public moviesAsProducer: ManyToMany<typeof Movie>;
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime;

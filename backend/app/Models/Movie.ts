@@ -1,6 +1,6 @@
-import { DateTime } from "luxon";
-import { BaseModel, column, HasMany, hasMany } from "@ioc:Adonis/Lucid/Orm";
-import Person from "./Person";
+import { DateTime } from 'luxon';
+import { BaseModel, column, manyToMany, ManyToMany } from '@ioc:Adonis/Lucid/Orm';
+import Person from './Person';
 
 export default class Movie extends BaseModel {
   @column({ isPrimary: true })
@@ -12,31 +12,37 @@ export default class Movie extends BaseModel {
   @column()
   public releaseYear: number;
 
-  @hasMany(() => Person)
-  public casting: HasMany<typeof Person>;
+  @manyToMany(() => Person, {
+    pivotTable: 'movie_cast'
+  })
+  public casting: ManyToMany<typeof Person>;
 
-  @hasMany(() => Person)
-  public directors: HasMany<typeof Person>;
+  @manyToMany(() => Person, {
+    pivotTable: 'movie_directors'
+  })
+  public directors: ManyToMany<typeof Person>;
 
-  @hasMany(() => Person)
-  public producers: HasMany<typeof Person>;
+  @manyToMany(() => Person, {
+    pivotTable: 'movie_producers'
+  })
+  public producers: ManyToMany<typeof Person>;
 
   public get releaseYearRoman(): string {
     // https://rosettacode.org/wiki/Roman_numerals/Encode#Declarative
-    return "I"
+    return 'I'
       .repeat(this.releaseYear)
-      .replace(/IIIII/g, "V")
-      .replace(/VV/g, "X")
-      .replace(/XXXXX/g, "L")
-      .replace(/LL/g, "C")
-      .replace(/CCCCC/g, "D")
-      .replace(/DD/g, "M")
-      .replace(/VIIII/g, "IX")
-      .replace(/LXXXX/g, "XC")
-      .replace(/XXXX/g, "XL")
-      .replace(/DCCCC/g, "CM")
-      .replace(/CCCC/g, "CD")
-      .replace(/IIII/g, "IV");
+      .replace(/IIIII/g, 'V')
+      .replace(/VV/g, 'X')
+      .replace(/XXXXX/g, 'L')
+      .replace(/LL/g, 'C')
+      .replace(/CCCCC/g, 'D')
+      .replace(/DD/g, 'M')
+      .replace(/VIIII/g, 'IX')
+      .replace(/LXXXX/g, 'XC')
+      .replace(/XXXX/g, 'XL')
+      .replace(/DCCCC/g, 'CM')
+      .replace(/CCCC/g, 'CD')
+      .replace(/IIII/g, 'IV');
   }
 
   @column.dateTime({ autoCreate: true })
