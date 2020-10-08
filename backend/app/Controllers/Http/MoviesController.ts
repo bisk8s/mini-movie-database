@@ -25,8 +25,6 @@ export default class MoviesController {
     ]);
     const movie = await Movie.create(data);
     if (movie) {
-      console.log(data.casting);
-
       if (data.casting) {
         stringToArray(data.casting).map(personId => {
           MovieCast.create({
