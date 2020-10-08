@@ -17,14 +17,51 @@ export default class MoviesController {
   }
   public async store({ request, auth }: HttpContextContract) {
     await auth.authenticate();
+    const data = request.only(['title', 'releaseYear']);
+    const relationships = request.only(['casting', 'producers', 'directors']);
+    const movie = await Movie.firstOrCreate(data);
+    if (movie) {
+      if (relationships.casting) {
+        stringToArray(relationships.casting).map(personId => {
+          MovieCast.firstOrCreate({
+            movieId: movie.id,
+            personId: parseInt(personId)
+          });
+        });
+      }
+      if (relationships.producers) {
+        stringToArray(relationships.producers).map(personId => {
+          MovieProducers.firstOrCreate({
+            movieId: movie.id,
+            personId: parseInt(personId)
+          });
+        });
+      }
+      if (relationships.directors) {
+        stringToArray(relationships.directors).map(personId => {
+          MovieDirectors.create({
+            movieId: movie.id,
+            personId: parseInt(personId)
+          });
+        });
+      }
+    }
+    return movie;
+  }
+  public async update({ request, auth }: HttpContextContract) {
+    await auth.authenticate();
     const data = request.only([
+      'id',
       'title',
       'releaseYear',
       'casting',
       'producers',
       'directors'
     ]);
-    const movie = await Movie.firstOrCreate(data);
+    const movie = await Movie.findOrFail(parseInt(data.id));
+    movie.title = data.title || movie.title;
+    movie.releaseYear = data.releaseYear || movie.releaseYear;
+    await movie.save();
     if (movie) {
       if (data.casting) {
         stringToArray(data.casting).map(personId => {

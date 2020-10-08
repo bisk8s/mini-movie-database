@@ -54,4 +54,45 @@ export default class PeopleController {
     }
     return person;
   }
+  public async update({ request, auth }: HttpContextContract) {
+    await auth.authenticate();
+    const data = request.only(['id', 'lastName', 'firstName', 'aliases']);
+    const relationships = request.only([
+      'moviesAsActor',
+      'moviesAsDirector',
+      'moviesAsProducer'
+    ]);
+    const person = await Person.findOrFail(parseInt(data.id));
+    person.lastName = data.lastName || person.lastName;
+    person.firstName = data.firstName || person.firstName;
+    person.aliases = data.aliases || person.aliases;
+    await person.save();
+    if (person) {
+      if (relationships.moviesAsActor) {
+        stringToArray(relationships.moviesAsActor).map(movieId => {
+          MovieCast.firstOrCreate({
+            personId: person.id,
+            movieId: parseInt(movieId)
+          });
+        });
+      }
+      if (relationships.moviesAsProducer) {
+        stringToArray(relationships.moviesAsProducer).map(movieId => {
+          MovieProducers.firstOrCreate({
+            personId: person.id,
+            movieId: parseInt(movieId)
+          });
+        });
+      }
+      if (relationships.moviesAsDirector) {
+        stringToArray(relationships.moviesAsDirector).map(movieId => {
+          MovieDirectors.firstOrCreate({
+            personId: person.id,
+            movieId: parseInt(movieId)
+          });
+        });
+      }
+    }
+    return person;
+  }
 }
