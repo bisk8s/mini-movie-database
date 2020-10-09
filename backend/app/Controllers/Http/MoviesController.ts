@@ -8,12 +8,30 @@ import {
 import Movie from 'App/Models/Movie';
 
 export default class MoviesController {
-  public async index() {
-    const all = Movie.query()
+  public async index({ request }) {
+    const { s, page } = request.only(['s', 'page']);
+
+    let filtered = Movie.query();
+    if (s) {
+      const searchQuery = s.split(/\s/i).map((queryPart: string) => {
+        return `%${queryPart.trim()}%`;
+      });
+      searchQuery.forEach((term: string) => {
+        filtered = filtered.orWhereRaw(
+          `lower(title) like '${term.toLowerCase()}'`
+        );
+        filtered = filtered.orWhereRaw(
+          `lower (cast(release_year as text)) like '${term.toLowerCase()}'`
+        );
+      });
+    }
+
+    const preloaded = filtered
       .preload('casting')
       .preload('producers')
-      .preload('directors');
-    return all;
+      .preload('directors')
+      .paginate(page || 1);
+    return preloaded;
   }
   public async store({ request, auth }: HttpContextContract) {
     await auth.authenticate();

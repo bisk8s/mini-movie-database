@@ -8,12 +8,33 @@ import {
 import Person from 'App/Models/Person';
 
 export default class PeopleController {
-  public async index() {
-    const all = Person.query()
+  public async index({ request }: HttpContextContract) {
+    const { s, page } = request.only(['s', 'page']);
+
+    let filtered = Person.query();
+    if (s) {
+      const searchQuery = s.split(/\s/i).map((queryPart: string) => {
+        return `%${queryPart}%`;
+      });
+      searchQuery.forEach((like: string) => {
+        filtered = filtered.orWhereRaw(
+          `lower(last_name) like '${like.toLowerCase()}'`
+        );
+        filtered = filtered.orWhereRaw(
+          `lower(first_name) like '${like.toLowerCase()}'`
+        );
+        filtered = filtered.orWhereRaw(
+          `lower(aliases) like '${like.toLowerCase()}'`
+        );
+      });
+    }
+
+    const preloaded = filtered
       .preload('moviesAsActor')
       .preload('moviesAsDirector')
-      .preload('moviesAsProducer');
-    return all;
+      .preload('moviesAsProducer')
+      .paginate(page || 1);
+    return preloaded;
   }
   public async store({ request, auth }: HttpContextContract) {
     await auth.authenticate();
