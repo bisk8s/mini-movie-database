@@ -21,7 +21,7 @@
 import Route from '@ioc:Adonis/Core/Route';
 
 // USER
-Route.post('/login', 'UsersController.login');
+Route.post('/token', 'UsersController.login');
 Route.post('/user', 'UsersController.store');
 
 // PERSON

@@ -1,73 +1,170 @@
+import React from 'react';
+import {
+  StyleSheet,
+  View as DefaultView,
+  TouchableOpacity
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createStackNavigator } from '@react-navigation/stack';
-import * as React from 'react';
+import { get } from 'lodash';
+
+import {
+  createMaterialTopTabNavigator,
+  MaterialTopTabBarOptions
+} from '@react-navigation/material-top-tabs';
+import { StackScreenProps } from '@react-navigation/stack';
+
+import { View } from '../components/Themed';
+
+import { BottomTabParamList, RootStackParamList } from '../types';
+
+import InternalMenu from '../components/InternalMenu';
+
+import { PersonTabStackNavigator } from './PersonTabStackNavigator';
+import { MovieTabStackNavigator } from './MovieTabStackNavigator';
+import { Badge, Text } from 'react-native-paper';
+import { rspWidth, rspHeight } from '../utils/Responsive';
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
-import TabOneScreen from '../screens/TabOneScreen';
-import TabTwoScreen from '../screens/TabTwoScreen';
-import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
 
-const BottomTab = createBottomTabNavigator<BottomTabParamList>();
+const Tab = createMaterialTopTabNavigator<BottomTabParamList>();
 
-export default function BottomTabNavigator() {
+type TabBarItemProps = {
+  ikey: string;
+  label: string;
+  icon: string;
+  isFocused: boolean;
+  badge?: string;
+  onPress: () => void;
+};
+function TabBarItem({
+  ikey,
+  label,
+  icon,
+  badge,
+  isFocused,
+  onPress
+}: TabBarItemProps) {
   const colorScheme = useColorScheme();
+  const key = ikey;
 
   return (
-    <BottomTab.Navigator
-      initialRouteName="TabOne"
-      tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}>
-      <BottomTab.Screen
-        name="TabOne"
-        component={TabOneNavigator}
-        options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+    <TouchableOpacity
+      key={key}
+      onPress={onPress}
+      style={{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: rspHeight(24),
+        marginBottom: rspHeight(48),
+        borderRadius: rspWidth(48),
+
+        marginHorizontal: rspWidth(10),
+
+        backgroundColor: isFocused
+          ? Colors[colorScheme].tabActiveBackgroundColor
+          : Colors[colorScheme].tabInactiveBackgroundColor
+      }}
+    >
+      <DefaultView
+        style={{
+          position: 'relative'
         }}
+      >
+        <Badge
+          style={{
+            position: 'absolute',
+            top: rspWidth(-25),
+            left: rspWidth(50)
+          }}
+          visible={!!badge}
+          size={rspWidth(50)}
+        >
+          {badge}
+        </Badge>
+      </DefaultView>
+      <Ionicons
+        name={icon}
+        size={rspWidth(50)}
+        color={Colors[colorScheme].tint}
       />
-      <BottomTab.Screen
-        name="TabTwo"
-        component={TabTwoNavigator}
-        options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+      <Text
+        style={{
+          color: Colors[colorScheme].tint,
+          fontFamily: 'nunito-regular',
+          fontSize: rspHeight(25)
         }}
-      />
-    </BottomTab.Navigator>
+      >
+        {label}
+      </Text>
+    </TouchableOpacity>
   );
 }
 
-// You can explore the built-in icon families and icons on the web at:
-// https://icons.expo.fyi/
-function TabBarIcon(props: { name: string; color: string }) {
-  return <Ionicons size={30} style={{ marginBottom: -3 }} {...props} />;
-}
+export default function BottomTabNavigator({
+  navigation
+}: StackScreenProps<RootStackParamList>) {
+  const tabBarOptions: MaterialTopTabBarOptions = {
+    renderIndicator: () => null,
+    renderTabBarItem: props => {
+      const stateIndex = props.navigationState.index;
+      const index = props.navigationState.routes.lastIndexOf(props.route);
+      const isFocused = stateIndex === index;
 
-// Each tab has its own navigation stack, you can read more about this pattern here:
-// https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
-const TabOneStack = createStackNavigator<TabOneParamList>();
+      const name = get(props, ['route', 'name']);
 
-function TabOneNavigator() {
+      switch (name) {
+        default:
+        case 'MovieTab':
+          return (
+            <TabBarItem
+              ikey={props.key}
+              label="Movies"
+              isFocused={isFocused}
+              icon="ios-film"
+              {...props}
+            />
+          );
+        case 'PersonTab':
+          return (
+            <TabBarItem
+              ikey={props.key}
+              label="People"
+              isFocused={isFocused}
+              icon="ios-people"
+              {...props}
+            />
+          );
+      }
+    },
+    style: {
+      marginTop: -1,
+      backgroundColor: '#F7F7F7',
+
+      borderTopWidth: 3,
+      borderTopColor: '#F7F7F7'
+    }
+  };
+
   return (
-    <TabOneStack.Navigator>
-      <TabOneStack.Screen
-        name="TabOneScreen"
-        component={TabOneScreen}
-        options={{ headerTitle: 'Tab One Title' }}
-      />
-    </TabOneStack.Navigator>
+    <View style={styles.container}>
+      <InternalMenu navigation={navigation} />
+      <Tab.Navigator
+        swipeEnabled
+        tabBarPosition="bottom"
+        initialRouteName="MovieTab"
+        tabBarOptions={tabBarOptions}
+      >
+        <Tab.Screen name="MovieTab" component={MovieTabStackNavigator} />
+        <Tab.Screen name="PersonTab" component={PersonTabStackNavigator} />
+      </Tab.Navigator>
+    </View>
   );
 }
 
-const TabTwoStack = createStackNavigator<TabTwoParamList>();
-
-function TabTwoNavigator() {
-  return (
-    <TabTwoStack.Navigator>
-      <TabTwoStack.Screen
-        name="TabTwoScreen"
-        component={TabTwoScreen}
-        options={{ headerTitle: 'Tab Two Title' }}
-      />
-    </TabTwoStack.Navigator>
-  );
-}
+const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  }
+});

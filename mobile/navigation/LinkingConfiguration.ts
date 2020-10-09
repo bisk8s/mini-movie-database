@@ -4,21 +4,34 @@ export default {
   prefixes: [Linking.makeUrl('/')],
   config: {
     screens: {
-      Root: {
+      Login: {
         screens: {
-          TabOne: {
+          MainLogin: {
             screens: {
-              TabOneScreen: 'one',
-            },
-          },
-          TabTwo: {
-            screens: {
-              TabTwoScreen: 'two',
-            },
-          },
-        },
+              MainLogin: 'main'
+            }
+          }
+        }
       },
-      NotFound: '*',
-    },
-  },
+      Internal: {
+        screens: {
+          Movie: {
+            screens: {
+              MovieHome: 'MovieHome',
+              MovieDetail: 'MovieDetail',
+              MovieAdd: 'MovieAdd'
+            }
+          },
+          Person: {
+            screens: {
+              PersonHome: 'PersonHome',
+              PersonDetail: 'PersonDetail',
+              PersonAdd: 'PersonAdd'
+            }
+          }
+        }
+      },
+      NotFound: '*'
+    }
+  }
 };
