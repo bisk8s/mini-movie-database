@@ -1,5 +1,11 @@
 import { DateTime } from 'luxon';
-import { BaseModel, column, manyToMany, ManyToMany } from '@ioc:Adonis/Lucid/Orm';
+import {
+  BaseModel,
+  column,
+  computed,
+  manyToMany,
+  ManyToMany
+} from '@ioc:Adonis/Lucid/Orm';
 import Person from './Person';
 
 export default class Movie extends BaseModel {
@@ -27,6 +33,7 @@ export default class Movie extends BaseModel {
   })
   public producers: ManyToMany<typeof Person>;
 
+  @computed()
   public get releaseYearRoman(): string {
     // https://rosettacode.org/wiki/Roman_numerals/Encode#Declarative
     return 'I'
