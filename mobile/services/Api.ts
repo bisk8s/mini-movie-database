@@ -1,6 +1,7 @@
 import moment from 'moment';
 import { Alert } from 'react-native';
-import { first, get, isEmpty } from 'lodash';
+import { get } from 'lodash';
+import qs from 'querystring';
 import LocalStorage from './LocalStorage';
 
 //#region helper
@@ -26,7 +27,7 @@ export const API_URL = `${API_PROTOCOL}://${API_DOMAIN}`;
 //#endregion
 
 //#region JSON
-async function fetchJSON(path: string, options: RequestInit): Promise<any> {
+async function fetchJSON<T>(path: string, options: RequestInit): Promise<T> {
   const basePath = API_URL;
   const jsonPath = [basePath, path].join('/');
   console.log(`[${moment().format()}|${options.method}]`, jsonPath);
@@ -59,10 +60,11 @@ function getFormData(object: any): FormData {
   return formData;
 }
 
-//#region Login
-type LoginPasswordError = {
+type GenericError = {
   errors: { message: string }[];
 };
+
+//#region Login
 type LoginPasswordSuccess = {
   token: string;
   type: string;
@@ -72,26 +74,82 @@ export async function loginWithPassword(
   password: string
 ): Promise<string | null> {
   const data = getFormData({ email, password });
-  console.log(data);
-
   const options: RequestInit = {
     method: 'POST',
     body: data
   };
-  return fetchJSON('token', options)
+  return fetchJSON<LoginPasswordSuccess>('token', options)
     .then(response => {
-      if (response.token) {
-        const { token } = <LoginPasswordSuccess>response;
-        return token;
-      } else {
-        const { errors } = <LoginPasswordError>response;
-        Alert.alert('Error', first(errors)?.message || 'Unkow nerror.');
-      }
-      return null;
+      const { token } = <LoginPasswordSuccess>response;
+      return token;
     })
     .catch(e => {
       Alert.alert('Login failed', 'Server responded with: \n' + e);
       return null;
     });
+}
+//#endregion
+
+//#region Types
+export type PeopleResponseData = {
+  meta: {
+    total: number;
+    per_page: number;
+    current_page: number;
+    last_page: number;
+    first_page: number;
+    first_page_url: string;
+    last_page_url: string;
+    next_page_url: string;
+    previous_page_url: string;
+  };
+  data: PersonData[];
+};
+export type PersonData = {
+  id: number;
+  last_name: string;
+  first_name: string;
+  aliases: string[];
+  created_at: string;
+  updated_at: string;
+  moviesAsProducer?: MovieData[];
+  moviesAsActor?: MovieData[];
+  moviesAsDirector?: MovieData[];
+};
+export type MovieData = {
+  id: number;
+  title: string;
+  release_year: number;
+  created_at: string;
+  updated_at: string;
+  releaseYearRoman: string;
+  casting?: PersonData[];
+  directors?: PersonData[];
+  producers?: PersonData[];
+};
+//#endregion
+
+//#region Person
+export async function getPeople(
+  searchQuery: string,
+  page: number
+): Promise<PeopleResponseData | null> {
+  const queryString = qs.encode({
+    s: searchQuery,
+    page
+  });
+  const options: RequestInit = {
+    method: 'GET'
+  };
+  try {
+    const response = await fetchJSON<PeopleResponseData>(
+      `people?${queryString}`,
+      options
+    );
+    return <PeopleResponseData>response;
+  } catch (e) {
+    Alert.alert('Login failed', 'Server responded with: \n' + e);
+    return null;
+  }
 }
 //#endregion

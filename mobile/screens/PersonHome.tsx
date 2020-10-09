@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, ScrollView, View as DefaultView } from 'react-native';
-import { Searchbar, Chip, Button, Portal, Dialog } from 'react-native-paper';
+import { StyleSheet, ScrollView } from 'react-native';
+import { Searchbar } from 'react-native-paper';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { map, times } from 'lodash';
+import _ from 'lodash';
 
 import { View } from '../components/Themed';
-import { rspHeight, rspWidth } from '../utils/Responsive';
+import { rspHeight } from '../utils/Responsive';
 import { PersonTabParamList } from '../types';
 
 import RoundedContainer from '../components/RoundedContainer';
@@ -14,6 +14,7 @@ import Card, { CardProps } from '../components/Card';
 import AppbarHeader from '../components/AppbarHeader';
 
 import Collapsible from 'react-native-collapsible';
+import { getPeople, MovieData, PersonData } from '../services/Api';
 
 type PersonHomeScreenProps = {
   navigation: StackNavigationProp<PersonTabParamList>;
@@ -22,14 +23,22 @@ export default function PersonHomeScreen({
   navigation
 }: PersonHomeScreenProps) {
   const [addButtonHidden, setAddButtonHidden] = useState(true);
+  const [searchQuery, setSearchQuery] = React.useState('');
+  const [page, setPage] = React.useState(1);
+  const [people, setPeople] = React.useState([] as PersonData[]);
 
-  const fetchData = async () => {};
+  const fetchData = () => {
+    getPeople(searchQuery, page).then(response => {
+      if (response) {
+        setPeople(response.data);
+      }
+    });
+  };
   useEffect(() => {
     fetchData();
   }, []);
 
   const Search = () => {
-    const [searchQuery, setSearchQuery] = React.useState('');
     return (
       <Searchbar
         style={styles.searchbar}
@@ -41,23 +50,39 @@ export default function PersonHomeScreen({
   };
 
   const PersonCards = () => {
-    const cards: CardProps[] = times(3, () => {
-      return {
-        title: 'name',
-        subtitle: 'subtitle',
-        image: {
-          uri:
-            'https://m.media-amazon.com/images/M/MV5BMDE5OWMzM2QtOTU2ZS00NzAyLWI2MDEtOTRlYjIxZGM0OWRjXkEyXkFqcGdeQXVyODE5NzE3OTE@._V1_UX182_CR0,0,182,268_AL_.jpg'
-        },
-        onPress: () => navigation.navigate('PersonDetail')
-      };
-    });
-
     return (
       <>
-        {map(cards, (props, key) => (
-          <Card key={key.toString()} {...props} />
-        ))}
+        {_.map(people, (person, key) => {
+          let props: CardProps = {
+            title: `${person.first_name} ${person.last_name}`,
+            subtitle: person.aliases.join(),
+            relationships: [],
+            onPress: () => navigation.navigate('PersonDetail')
+          };
+
+          if (person.moviesAsActor?.length) {
+            props.relationships.push({
+              title: 'Acted in',
+              subitems: movieTosubItem(person.moviesAsActor)
+            });
+          }
+
+          if (person.moviesAsProducer?.length) {
+            props.relationships.push({
+              title: 'Produced',
+              subitems: movieTosubItem(person.moviesAsProducer)
+            });
+          }
+
+          if (person.moviesAsDirector?.length) {
+            props.relationships.push({
+              title: 'Directed',
+              subitems: movieTosubItem(person.moviesAsDirector)
+            });
+          }
+
+          return <Card key={key.toString()} {...props} />;
+        })}
       </>
     );
   };
@@ -85,6 +110,15 @@ export default function PersonHomeScreen({
       </RoundedContainer>
     </View>
   );
+
+  function movieTosubItem(movies: MovieData[]) {
+    return _.map(movies, movie => {
+      return {
+        id: movie.id,
+        title: movie.title
+      };
+    });
+  }
 }
 
 const styles = StyleSheet.create({

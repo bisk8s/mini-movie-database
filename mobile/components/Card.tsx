@@ -5,16 +5,24 @@ import {
   Avatar,
   Paragraph,
   Title,
-  Divider
+  Divider,
+  Chip
 } from 'react-native-paper';
 import { View, StyleSheet } from 'react-native';
-import { replace } from 'lodash';
+import _ from 'lodash';
 
 import { rspWidth, rspHeight } from '../utils/Responsive';
 
 export type CardProps = View['props'] & {
   title: string;
   subtitle: string;
+  relationships: {
+    title: string;
+    subitems: {
+      id: number;
+      title: string;
+    }[];
+  }[];
   image?: { uri: string };
   onPress?: () => void;
 };
@@ -24,6 +32,7 @@ export default function Card({
   title,
   subtitle,
   image,
+  relationships,
   onPress
 }: CardProps) {
   const LeftContent = (props: any) => {
@@ -33,6 +42,7 @@ export default function Card({
       return <Avatar.Text {...props} label={initials(title)} />;
     }
   };
+
   const RightContent = (props: any) => (
     <IconButton {...props} icon="chevron-right" onPress={onPress} />
   );
@@ -50,17 +60,21 @@ export default function Card({
           right={RightContent}
         />
         <PaperCard.Content>
-          <View style={styles.infoLine}>
-            <Divider style={styles.divider} />
-            <Title style={styles.cardTitle}>aaaa: </Title>
-            <Paragraph style={styles.cardDesc}>aaaa</Paragraph>
-          </View>
-          <Divider style={styles.divider} />
-
-          <View style={styles.infoLine}>
-            <Title style={styles.cardTitle}>bbbb: </Title>
-            <Paragraph style={styles.cardDesc}>bbbb</Paragraph>
-          </View>
+          {_.map(relationships, ({ title, subitems }) => {
+            return (
+              <View key={title}>
+                <Title style={styles.cardTitle}>{title}</Title>
+                <View style={styles.infoLine}>
+                  {_.map(subitems, ({ id, title }) => (
+                    <Chip key={id} icon="filmstrip">
+                      {title}
+                    </Chip>
+                  ))}
+                </View>
+                <Divider style={styles.divider} />
+              </View>
+            );
+          })}
         </PaperCard.Content>
       </PaperCard>
     </>
@@ -68,7 +82,7 @@ export default function Card({
 }
 
 function initials(name: string): string {
-  return replace(name, /[a-z\s\d]/g, '').substr(0, 2);
+  return _.replace(name, /[a-z\s\d]/g, '').substr(0, 2);
 }
 
 const styles = StyleSheet.create({
@@ -92,7 +106,7 @@ const styles = StyleSheet.create({
   },
   infoLine: {
     flexDirection: 'row',
-    alignItems: 'center'
+    justifyContent: 'space-evenly'
   },
   divider: {
     marginTop: rspHeight(10)
