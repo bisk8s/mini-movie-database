@@ -87,6 +87,15 @@ export default function PersonHomeScreen({
     );
   };
 
+  function movieTosubItem(movies: MovieData[]) {
+    return _.map(movies, movie => {
+      return {
+        id: movie.id,
+        title: movie.title
+      };
+    });
+  }
+
   return (
     <View style={styles.container}>
       <AppbarHeader title={'People'} />
@@ -110,15 +119,6 @@ export default function PersonHomeScreen({
       </RoundedContainer>
     </View>
   );
-
-  function movieTosubItem(movies: MovieData[]) {
-    return _.map(movies, movie => {
-      return {
-        id: movie.id,
-        title: movie.title
-      };
-    });
-  }
 }
 
 const styles = StyleSheet.create({

@@ -60,12 +60,12 @@ function getFormData(object: any): FormData {
   return formData;
 }
 
-type GenericError = {
+export type GenericError = {
   errors: { message: string }[];
 };
 
 //#region Login
-type LoginPasswordSuccess = {
+export type LoginPasswordSuccess = {
   token: string;
   type: string;
 };
@@ -104,6 +104,20 @@ export type PeopleResponseData = {
     previous_page_url: string;
   };
   data: PersonData[];
+};
+export type MoviesResponseData = {
+  meta: {
+    total: number;
+    per_page: number;
+    current_page: number;
+    last_page: number;
+    first_page: number;
+    first_page_url: string;
+    last_page_url: string;
+    next_page_url: string;
+    previous_page_url: string;
+  };
+  data: MovieData[];
 };
 export type PersonData = {
   id: number;
@@ -147,6 +161,31 @@ export async function getPeople(
       options
     );
     return <PeopleResponseData>response;
+  } catch (e) {
+    Alert.alert('Login failed', 'Server responded with: \n' + e);
+    return null;
+  }
+}
+//#endregion
+
+//#region Movie
+export async function getMovies(
+  searchQuery: string,
+  page: number
+): Promise<MoviesResponseData | null> {
+  const queryString = qs.encode({
+    s: searchQuery,
+    page
+  });
+  const options: RequestInit = {
+    method: 'GET'
+  };
+  try {
+    const response = await fetchJSON<MoviesResponseData>(
+      `movies?${queryString}`,
+      options
+    );
+    return <MoviesResponseData>response;
   } catch (e) {
     Alert.alert('Login failed', 'Server responded with: \n' + e);
     return null;
