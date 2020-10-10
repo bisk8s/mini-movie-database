@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { IconButton, Menu } from 'react-native-paper';
 import { View, StyleSheet } from 'react-native';
 import Constants from 'expo-constants';
@@ -6,18 +6,47 @@ import Constants from 'expo-constants';
 import { rspWidth } from '../utils/Responsive';
 import { RootStackParamList } from '../types';
 import { StackNavigationProp } from '@react-navigation/stack';
+import Globals from '../utils/Globals';
 
 export default function InternalMenu({
   navigation
 }: {
   navigation: StackNavigationProp<RootStackParamList>;
 }) {
-  const [visible, setVisible] = React.useState(false);
-  const openMenu = () => setVisible(true);
-  const closeMenu = () => setVisible(false);
+  const [visible, setVisible] = useState(false);
+  const [authAreaHidden, setAuthAreaHidden] = useState(true);
+
+  const openMenu = () => {
+    fetchToken().then(() => {
+      setVisible(true);
+    });
+  };
+
+  const closeMenu = () => {
+    fetchToken().then(() => {
+      setVisible(false);
+    });
+  };
+
   const navigateToLogin = () => {
     setVisible(false);
     navigation.navigate('Login');
+  };
+
+  const navigateToLogoff = () => {
+    setVisible(false);
+    setAuthAreaHidden(false);
+    Globals.token = '';
+    navigation.navigate('Login');
+  };
+
+  useEffect(() => {
+    fetchToken();
+  }, []);
+
+  const fetchToken = async () => {
+    const { token } = Globals;
+    setAuthAreaHidden(!(token && token.length > 0));
   };
 
   return (
@@ -35,7 +64,12 @@ export default function InternalMenu({
             />
           }
         >
-          <Menu.Item onPress={navigateToLogin} title="Login" />
+          {authAreaHidden && (
+            <Menu.Item onPress={navigateToLogin} title="Login" />
+          )}
+          {!authAreaHidden && (
+            <Menu.Item onPress={navigateToLogoff} title="Logout" />
+          )}
         </Menu>
       </View>
     </View>

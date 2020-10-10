@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -15,17 +15,23 @@ type ScreenProps = {
   navigation: StackNavigationProp<MovieTabParamList>;
 };
 export default function MovieAdddScreen({ navigation }: ScreenProps) {
+  const [title, setTitle] = useState('');
+  const [releaseYear, setReleaseYear] = useState(0);
   return (
     <View style={styles.container}>
-      <AppbarHeader title={'Add'} />
+      <AppbarHeader title={'Add'} goBack={navigation.goBack} />
       <RoundedContainer style={{ overflow: 'visible' }}>
-        <TextInput mode="outlined" label="Renda" />
+        <TextInput mode="outlined" label="Title" />
         <Spacer />
-        <TextInput mode="outlined" label="Observação" multiline />
+        <TextInput
+          mode="outlined"
+          label="Release Year"
+          keyboardType="numeric"
+        />
         <Spacer />
         <GradientButton
           icon="send"
-          label="Enviar"
+          label="Add"
           onPress={() => navigation.navigate('MovieAdd')}
           colors={['#05E560', '#04AF49']}
           labelColor={'#FFF'}

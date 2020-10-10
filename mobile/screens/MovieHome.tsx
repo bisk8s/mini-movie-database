@@ -15,22 +15,27 @@ import AppbarHeader from '../components/AppbarHeader';
 
 import Collapsible from 'react-native-collapsible';
 import { PersonData, MovieData, getMovies } from '../services/Api';
+import Globals from '../utils/Globals';
 
 type MovieHomeScreenProps = {
   navigation: StackNavigationProp<MovieTabParamList>;
 };
 export default function MovieHomeScreen({ navigation }: MovieHomeScreenProps) {
   const [authAreaHidden, setAuthAreaHidden] = useState(true);
-  const [searchQuery, setSearchQuery] = React.useState('');
-  const [page, setPage] = React.useState(1);
-  const [movies, setMovies] = React.useState([] as MovieData[]);
-  const [refreshing, setRefreshing] = React.useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [page, setPage] = useState(1);
+  const [movies, setMovies] = useState([] as MovieData[]);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
+    navigation.addListener('focus', () => fetchMovies());
     fetchMovies();
   }, []);
 
   const fetchMovies = async (sq?: string) => {
+    const { token } = Globals;
+    setAuthAreaHidden(!(token && token.length > 0));
+
     const query = sq !== undefined ? sq : searchQuery;
     getMovies(query, page).then(response => {
       response && setMovies(response.data);

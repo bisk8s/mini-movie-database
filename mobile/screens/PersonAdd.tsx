@@ -11,18 +11,23 @@ import RoundedContainer from '../components/RoundedContainer';
 import AppbarHeader from '../components/AppbarHeader';
 import GradientButton from '../components/GradientButton';
 
-export default function AddScreen({
-  navigation
-}: {
+type ScreenProps = {
   navigation: StackNavigationProp<PersonTabParamList>;
-}) {
+};
+export default function AddScreen({ navigation }: ScreenProps) {
   return (
     <View style={styles.container}>
-      <AppbarHeader title={'Add Person'} />
+      <AppbarHeader title={'Add Person'} goBack={navigation.goBack} />
       <RoundedContainer style={{ overflow: 'visible' }}>
-        <TextInput mode="outlined" label="Renda" />
+        <TextInput mode="outlined" label="First Name" />
         <Spacer />
-        <TextInput mode="outlined" label="Observação" multiline />
+        <TextInput mode="outlined" label="Last Name" />
+        <Spacer />
+        <TextInput
+          mode="outlined"
+          label="Aliases (separeted by ',')"
+          multiline
+        />
         <Spacer />
         <GradientButton
           icon="send"

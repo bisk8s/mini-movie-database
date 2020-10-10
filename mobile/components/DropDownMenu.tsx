@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { View, StyleSheet } from 'react-native';
 import { Menu, Text } from 'react-native-paper';
@@ -15,11 +15,11 @@ type DropDownMenuProp = {
   onChange?: (label: string) => void;
 };
 export default function DropDownMenu({ items, onChange }: DropDownMenuProp) {
-  const [visible, setVisible] = React.useState(false);
+  const [visible, setVisible] = useState(false);
   const openMenu = () => setVisible(true);
   const closeMenu = () => setVisible(false);
 
-  const [selected, setSelected] = React.useState('');
+  const [selected, setSelected] = useState('');
   const colorScheme = useColorScheme();
 
   const borderColor = Colors[colorScheme].tint;
@@ -33,10 +33,19 @@ export default function DropDownMenu({ items, onChange }: DropDownMenuProp) {
         width: '85%'
       }}
       anchor={
-        <TouchableOpacity onPress={openMenu} style={[styles.container, { borderColor }]}>
+        <TouchableOpacity
+          onPress={openMenu}
+          style={[styles.container, { borderColor }]}
+        >
           <View style={styles.content}>
-            <Text style={{ color }}>{isEmpty(selected) ? 'Selecione' : selected}</Text>
-            <MaterialCommunityIcons name="chevron-down" size={rspHeight(50)} color={color} />
+            <Text style={{ color }}>
+              {isEmpty(selected) ? 'Selecione' : selected}
+            </Text>
+            <MaterialCommunityIcons
+              name="chevron-down"
+              size={rspHeight(50)}
+              color={color}
+            />
           </View>
         </TouchableOpacity>
       }

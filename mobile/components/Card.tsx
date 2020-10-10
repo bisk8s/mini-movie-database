@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   Card as PaperCard,
   IconButton,
   Avatar,
-  Paragraph,
   Title,
   Divider,
   Chip
@@ -12,6 +11,8 @@ import { View, StyleSheet } from 'react-native';
 import _ from 'lodash';
 
 import { rspWidth, rspHeight } from '../utils/Responsive';
+import LocalStorage from '../services/LocalStorage';
+import Collapsible from 'react-native-collapsible';
 
 export type CardProps = View['props'] & {
   title: string;

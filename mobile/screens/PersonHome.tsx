@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { StyleSheet, ScrollView } from 'react-native';
+import { StyleSheet, ScrollView, RefreshControl } from 'react-native';
 import { Searchbar } from 'react-native-paper';
 import { StackNavigationProp } from '@react-navigation/stack';
 import _ from 'lodash';
@@ -15,6 +15,7 @@ import AppbarHeader from '../components/AppbarHeader';
 
 import Collapsible from 'react-native-collapsible';
 import { getPeople, MovieData, PersonData } from '../services/Api';
+import Globals from '../utils/Globals';
 
 type PersonHomeScreenProps = {
   navigation: StackNavigationProp<PersonTabParamList>;
@@ -29,15 +30,20 @@ export default function PersonHomeScreen({
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
+    navigation.addListener('focus', () => fetchPeople());
     fetchPeople();
   }, []);
 
   const fetchPeople = async (sq?: string) => {
+    const { token } = Globals;
+    setAuthAreaHidden(!(token && token.length > 0));
+
     const query = sq !== undefined ? sq : searchQuery;
     getPeople(query, page).then(response => {
       if (response) {
         setPeople(response.data);
       }
+      setRefreshing(false);
     });
   };
 
@@ -67,6 +73,9 @@ export default function PersonHomeScreen({
         <ScrollView
           style={styles.scrollview}
           showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
         >
           <Searchbar
             style={styles.searchbar}

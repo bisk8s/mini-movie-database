@@ -10,8 +10,8 @@ import { rspHeight } from '../utils/Responsive';
 import Logo from '../components/Logo';
 
 import { getToken } from '../services/Api';
-import { isEmpty } from 'lodash';
 import LocalStorage from '../services/LocalStorage';
+import Globals from '../utils/Globals';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -35,7 +35,7 @@ export default function LoginScreen({
   const onPressLoginButton = async () => {
     const token = await getToken(email, password);
     if (token) {
-      LocalStorage.set('token', token);
+      Globals.token = token;
       navigation.navigate('Internal');
     }
   };
