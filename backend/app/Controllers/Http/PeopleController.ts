@@ -12,7 +12,7 @@ export default class PeopleController {
     const { s, page } = request.only(['s', 'page']);
 
     let filtered = Person.query();
-    if (s) {
+    if (s && s.split) {
       const searchQuery = s.split(/\s/i).map((queryPart: string) => {
         return `%${queryPart}%`;
       });

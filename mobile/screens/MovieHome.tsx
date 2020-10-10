@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, ScrollView } from 'react-native';
+import React, { useEffect, useState, useCallback } from 'react';
+import { StyleSheet, ScrollView, RefreshControl } from 'react-native';
 import { Searchbar } from 'react-native-paper';
 import { StackNavigationProp } from '@react-navigation/stack';
 import _ from 'lodash';
@@ -20,79 +20,42 @@ type MovieHomeScreenProps = {
   navigation: StackNavigationProp<MovieTabParamList>;
 };
 export default function MovieHomeScreen({ navigation }: MovieHomeScreenProps) {
-  const [addButtonHidden, setAddButtonHidden] = useState(true);
+  const [authAreaHidden, setAuthAreaHidden] = useState(true);
   const [searchQuery, setSearchQuery] = React.useState('');
   const [page, setPage] = React.useState(1);
   const [movies, setMovies] = React.useState([] as MovieData[]);
+  const [refreshing, setRefreshing] = React.useState(false);
 
-  const fetchData = async () => {
-    getMovies(searchQuery, page).then(response => {
-      if (response) {
-        setMovies(response.data);
-      }
-    });
-  };
   useEffect(() => {
-    fetchData();
+    fetchMovies();
   }, []);
 
-  const Search = () => {
-    return (
-      <Searchbar
-        style={styles.searchbar}
-        placeholder="Search"
-        onChangeText={setSearchQuery}
-        value={searchQuery}
-      />
-    );
+  const fetchMovies = async (sq?: string) => {
+    const query = sq !== undefined ? sq : searchQuery;
+    getMovies(query, page).then(response => {
+      response && setMovies(response.data);
+      setRefreshing(false);
+    });
   };
 
-  const MovieCards = () => {
-    return (
-      <>
-        {_.map(movies, (movie, key) => {
-          let props: CardProps = {
-            title: movie.title,
-            subtitle: `${movie.release_year} (${movie.releaseYearRoman})`,
-            relationships: [],
-            onPress: () => navigation.navigate('MovieDetail')
-          };
-
-          if (movie.casting?.length) {
-            props.relationships.push({
-              title: 'Casting',
-              subitems: personTosubItem(movie.casting)
-            });
-          }
-
-          if (movie.producers?.length) {
-            props.relationships.push({
-              title: 'Producers',
-              subitems: personTosubItem(movie.producers)
-            });
-          }
-
-          if (movie.directors?.length) {
-            props.relationships.push({
-              title: 'Directors',
-              subitems: personTosubItem(movie.directors)
-            });
-          }
-
-          return <Card key={key.toString()} {...props} />;
-        })}
-      </>
-    );
+  const onChangeSearch = (sq: string) => {
+    setSearchQuery(sq);
+    fetchMovies(sq);
   };
 
-  function personTosubItem(movies: PersonData[]) {
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    fetchMovies();
+  }, []);
+
+  const personTosubItem = (movies: PersonData[]) => {
     return _.map(movies, movie => {
       return {
         id: movie.id,
         title: `${movie.first_name} ${movie.last_name}`
       };
     });
-  }
+  };
 
   return (
     <View style={styles.container}>
@@ -101,9 +64,19 @@ export default function MovieHomeScreen({ navigation }: MovieHomeScreenProps) {
         <ScrollView
           style={styles.scrollview}
           showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
         >
-          <Search />
-          <Collapsible collapsed={addButtonHidden}>
+          <Searchbar
+            style={styles.searchbar}
+            placeholder="Search"
+            // onChangeText won't work properly // https://github.com/facebook/react-native/issues/13251
+            // onChangeText={onChangeSearch}
+            onChange={e => onChangeSearch(e.nativeEvent.text)}
+            value={searchQuery}
+          />
+          <Collapsible collapsed={authAreaHidden}>
             <GradientButton
               icon="plus"
               label="Add Movie"
@@ -112,7 +85,37 @@ export default function MovieHomeScreen({ navigation }: MovieHomeScreenProps) {
               labelColor={'#FFF'}
             />
           </Collapsible>
-          <MovieCards />
+          {_.map(movies, movie => {
+            let props: CardProps = {
+              title: movie.title,
+              subtitle: `${movie.release_year} (${movie.releaseYearRoman})`,
+              relationships: [],
+              onPress: () => navigation.navigate('MovieDetail')
+            };
+
+            if (movie.casting?.length) {
+              props.relationships.push({
+                title: 'Casting',
+                subitems: personTosubItem(movie.casting)
+              });
+            }
+
+            if (movie.producers?.length) {
+              props.relationships.push({
+                title: 'Producers',
+                subitems: personTosubItem(movie.producers)
+              });
+            }
+
+            if (movie.directors?.length) {
+              props.relationships.push({
+                title: 'Directors',
+                subitems: personTosubItem(movie.directors)
+              });
+            }
+
+            return <Card key={movie.id.toString()} {...props} />;
+          })}
         </ScrollView>
       </RoundedContainer>
     </View>
@@ -129,10 +132,5 @@ const styles = StyleSheet.create({
   },
   searchbar: {
     marginBottom: rspHeight(25)
-  },
-  filters: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: rspHeight(24)
   }
 });

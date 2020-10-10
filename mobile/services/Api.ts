@@ -21,7 +21,7 @@ type AuthError = {
 
 //#region Config
 export const API_PROTOCOL = 'http';
-export const API_DOMAIN = 'localhost:3333';
+export const API_DOMAIN = '192.168.1.56:3333';
 
 export const API_URL = `${API_PROTOCOL}://${API_DOMAIN}`;
 //#endregion
@@ -31,7 +31,7 @@ async function fetchJSON<T>(path: string, options: RequestInit): Promise<T> {
   const basePath = API_URL;
   const jsonPath = [basePath, path].join('/');
   console.log(`[${moment().format()}|${options.method}]`, jsonPath);
-  console.log('[REQ>>]', JSON.stringify(options, null, 4));
+  // console.log('[REQ>>]', JSON.stringify(options, null, 4));
   return fetch(jsonPath, options)
     .then(response => {
       const json = response.json();
@@ -39,8 +39,8 @@ async function fetchJSON<T>(path: string, options: RequestInit): Promise<T> {
     })
     .then(data => {
       //DEBUG RESPONSE
-      console.log(`[${moment().format()}|${options.method}]`, jsonPath);
-      console.log('[RES>>]', JSON.stringify(data, null, 4));
+      // console.log(`[${moment().format()}|${options.method}]`, jsonPath);
+      // console.log('[RES>>]', JSON.stringify(data, null, 4));
       const message = get(<AuthError>data, 'Message', false);
       if (message) {
         Alert.alert('Erro de Autorização', message);
@@ -48,7 +48,7 @@ async function fetchJSON<T>(path: string, options: RequestInit): Promise<T> {
       return data;
     })
     .catch(e => {
-      Alert.alert('Erro de Parsing', 'O serviço respondeu com: \n\n' + e);
+      Alert.alert('Error', 'O serviço respondeu com: \n\n' + e);
       return null;
     });
 }

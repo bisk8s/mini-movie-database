@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, ScrollView } from 'react-native';
 import { Searchbar } from 'react-native-paper';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -22,79 +22,43 @@ type PersonHomeScreenProps = {
 export default function PersonHomeScreen({
   navigation
 }: PersonHomeScreenProps) {
-  const [addButtonHidden, setAddButtonHidden] = useState(true);
-  const [searchQuery, setSearchQuery] = React.useState('');
-  const [page, setPage] = React.useState(1);
-  const [people, setPeople] = React.useState([] as PersonData[]);
+  const [authAreaHidden, setAuthAreaHidden] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [page, setPage] = useState(1);
+  const [people, setPeople] = useState([] as PersonData[]);
+  const [refreshing, setRefreshing] = useState(false);
 
-  const fetchData = () => {
-    getPeople(searchQuery, page).then(response => {
+  useEffect(() => {
+    fetchPeople();
+  }, []);
+
+  const fetchPeople = async (sq?: string) => {
+    const query = sq !== undefined ? sq : searchQuery;
+    getPeople(query, page).then(response => {
       if (response) {
         setPeople(response.data);
       }
     });
   };
-  useEffect(() => {
-    fetchData();
+
+  const onChangeSearch = (sq: string) => {
+    setSearchQuery(sq);
+    fetchPeople(sq);
+  };
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    fetchPeople();
   }, []);
 
-  const Search = () => {
-    return (
-      <Searchbar
-        style={styles.searchbar}
-        placeholder="Search"
-        onChangeText={setSearchQuery}
-        value={searchQuery}
-      />
-    );
-  };
-
-  const PersonCards = () => {
-    return (
-      <>
-        {_.map(people, (person, key) => {
-          let props: CardProps = {
-            title: `${person.first_name} ${person.last_name}`,
-            subtitle: person.aliases.join(),
-            relationships: [],
-            onPress: () => navigation.navigate('PersonDetail')
-          };
-
-          if (person.moviesAsActor?.length) {
-            props.relationships.push({
-              title: 'Acted in',
-              subitems: movieTosubItem(person.moviesAsActor)
-            });
-          }
-
-          if (person.moviesAsProducer?.length) {
-            props.relationships.push({
-              title: 'Produced',
-              subitems: movieTosubItem(person.moviesAsProducer)
-            });
-          }
-
-          if (person.moviesAsDirector?.length) {
-            props.relationships.push({
-              title: 'Directed',
-              subitems: movieTosubItem(person.moviesAsDirector)
-            });
-          }
-
-          return <Card key={key.toString()} {...props} />;
-        })}
-      </>
-    );
-  };
-
-  function movieTosubItem(movies: MovieData[]) {
+  const movieTosubItem = (movies: MovieData[]) => {
     return _.map(movies, movie => {
       return {
         id: movie.id,
         title: movie.title
       };
     });
-  }
+  };
 
   return (
     <View style={styles.container}>
@@ -104,8 +68,15 @@ export default function PersonHomeScreen({
           style={styles.scrollview}
           showsVerticalScrollIndicator={false}
         >
-          <Search />
-          <Collapsible collapsed={addButtonHidden}>
+          <Searchbar
+            style={styles.searchbar}
+            placeholder="Search"
+            // onChangeText won't work properly // https://github.com/facebook/react-native/issues/13251
+            // onChangeText={onChangeSearch}
+            onChange={e => onChangeSearch(e.nativeEvent.text)}
+            value={searchQuery}
+          />
+          <Collapsible collapsed={authAreaHidden}>
             <GradientButton
               icon="plus"
               label="Add Person"
@@ -114,7 +85,37 @@ export default function PersonHomeScreen({
               labelColor={'#FFF'}
             />
           </Collapsible>
-          <PersonCards />
+          {_.map(people, (person, key) => {
+            let props: CardProps = {
+              title: `${person.first_name} ${person.last_name}`,
+              subtitle: person.aliases.join(),
+              relationships: [],
+              onPress: () => navigation.navigate('PersonDetail')
+            };
+
+            if (person.moviesAsActor?.length) {
+              props.relationships.push({
+                title: 'Acted in',
+                subitems: movieTosubItem(person.moviesAsActor)
+              });
+            }
+
+            if (person.moviesAsProducer?.length) {
+              props.relationships.push({
+                title: 'Produced',
+                subitems: movieTosubItem(person.moviesAsProducer)
+              });
+            }
+
+            if (person.moviesAsDirector?.length) {
+              props.relationships.push({
+                title: 'Directed',
+                subitems: movieTosubItem(person.moviesAsDirector)
+              });
+            }
+
+            return <Card key={key.toString()} {...props} />;
+          })}
         </ScrollView>
       </RoundedContainer>
     </View>

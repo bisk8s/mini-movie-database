@@ -12,7 +12,7 @@ export default class MoviesController {
     const { s, page } = request.only(['s', 'page']);
 
     let filtered = Movie.query();
-    if (s) {
+    if (s && s.length) {
       const searchQuery = s.split(/\s/i).map((queryPart: string) => {
         return `%${queryPart.trim()}%`;
       });
