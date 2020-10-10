@@ -28,6 +28,7 @@ export default function PersonHomeScreen({
   const [page, setPage] = useState(1);
   const [people, setPeople] = useState([] as PersonData[]);
   const [refreshing, setRefreshing] = useState(false);
+  const [loadMoreButtonHidden, setLoadMoreButtonVisible] = useState(true);
 
   useEffect(() => {
     navigation.addListener('focus', () => fetchPeople());
@@ -44,7 +45,16 @@ export default function PersonHomeScreen({
         setPeople(response.data);
       }
       setRefreshing(false);
+      if (response && response.meta) {
+        const { current_page, last_page } = response.meta;
+        setLoadMoreButtonVisible(current_page === last_page);
+      }
     });
+  };
+
+  const loadMore = () => {
+    setPage(page + 1);
+    fetchPeople();
   };
 
   const onChangeSearch = (sq: string) => {
@@ -125,6 +135,15 @@ export default function PersonHomeScreen({
 
             return <Card key={key.toString()} {...props} />;
           })}
+          <Collapsible collapsed={loadMoreButtonHidden}>
+            <GradientButton
+              icon="plus"
+              label="Add Movie"
+              onPress={loadMore}
+              colors={['#EEEEEE', '#FFFFFF']}
+              labelColor={'#333333'}
+            />
+          </Collapsible>
         </ScrollView>
       </RoundedContainer>
     </View>

@@ -26,6 +26,7 @@ export default function MovieHomeScreen({ navigation }: MovieHomeScreenProps) {
   const [page, setPage] = useState(1);
   const [movies, setMovies] = useState([] as MovieData[]);
   const [refreshing, setRefreshing] = useState(false);
+  const [loadMoreButtonHidden, setLoadMoreButtonVisible] = useState(true);
 
   useEffect(() => {
     navigation.addListener('focus', () => fetchMovies());
@@ -40,7 +41,16 @@ export default function MovieHomeScreen({ navigation }: MovieHomeScreenProps) {
     getMovies(query, page).then(response => {
       response && setMovies(response.data);
       setRefreshing(false);
+      if (response && response.meta) {
+        const { current_page, last_page } = response.meta;
+        setLoadMoreButtonVisible(current_page === last_page);
+      }
     });
+  };
+
+  const loadMore = () => {
+    setPage(page + 1);
+    fetchMovies();
   };
 
   const onChangeSearch = (sq: string) => {
@@ -121,6 +131,15 @@ export default function MovieHomeScreen({ navigation }: MovieHomeScreenProps) {
 
             return <Card key={movie.id.toString()} {...props} />;
           })}
+          <Collapsible collapsed={loadMoreButtonHidden}>
+            <GradientButton
+              icon="plus"
+              label="Add Movie"
+              onPress={loadMore}
+              colors={['#EEEEEE', '#FFFFFF']}
+              labelColor={'#333333'}
+            />
+          </Collapsible>
         </ScrollView>
       </RoundedContainer>
     </View>

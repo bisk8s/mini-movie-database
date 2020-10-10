@@ -10,7 +10,6 @@ import Movie from 'App/Models/Movie';
 export default class MoviesController {
   public async index({ request }) {
     const { s, page } = request.only(['s', 'page']);
-
     let filtered = Movie.query();
     if (s && s.length) {
       const searchQuery = s.split(/\s/i).map((queryPart: string) => {

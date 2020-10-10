@@ -228,11 +228,21 @@ export async function getMovies(
     return null;
   }
 }
-export async function addMovie(movie: MovieData): Promise<MovieData | null> {
-  const data = getFormData(movie);
+export async function addMovie(
+  title: string,
+  releaseYear: number,
+  token: string
+): Promise<MovieData | null> {
+  const form = { title, releaseYear };
+  console.log(form);
+
+  const data = getFormData(form);
   const options: RequestInit = {
     method: 'POST',
-    body: data
+    body: data,
+    headers: {
+      authorization: `Bearer ${token}`
+    }
   };
   return fetchJSON<MovieData>('movie', options)
     .then(response => {
