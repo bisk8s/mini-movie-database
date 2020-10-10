@@ -37,6 +37,10 @@ Route.put('/movie', 'MoviesController.update');
 Route.delete('/movie', 'MoviesController.remove');
 
 // RELATIONSHIP
+Route.post('/casting', 'MoviePeopleController.addCasting');
+Route.post('/producer', 'MoviePeopleController.addProducer');
+Route.post('/director', 'MoviePeopleController.addDirector');
+
 Route.delete('/casting', 'MoviePeopleController.removeCasting');
 Route.delete('/producer', 'MoviePeopleController.removeProducer');
 Route.delete('/director', 'MoviePeopleController.removeDirector');

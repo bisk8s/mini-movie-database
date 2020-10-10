@@ -6,6 +6,25 @@ import {
 } from 'App/Models/MoviePerson';
 
 export default class MoviePeopleController {
+  public async addCasting({ request, auth }: HttpContextContract) {
+    await auth.authenticate();
+    const data = request.only(['movieId', 'personId']);
+    const relation = await MovieCast.firstOrCreate(data);
+    return relation;
+  }
+  public async addProducer({ request, auth }: HttpContextContract) {
+    await auth.authenticate();
+    const data = request.only(['movieId', 'personId']);
+    const relation = await MovieProducers.firstOrCreate(data);
+    return relation;
+  }
+  public async addDirector({ request, auth }: HttpContextContract) {
+    await auth.authenticate();
+    const data = request.only(['movieId', 'personId']);
+    const relation = await MovieDirectors.firstOrCreate(data);
+    return relation;
+  }
+
   public async removeCasting({ request, auth }: HttpContextContract) {
     await auth.authenticate();
     const data = request.only(['id']);
