@@ -33,10 +33,15 @@ export default function InternalMenu({
     navigation.navigate('Login');
   };
 
-  const navigateToLogoff = () => {
+  const navigateToUserAdd = () => {
     setVisible(false);
-    setAuthAreaHidden(false);
+    navigation.navigate('UserAdd');
+  };
+
+  const logoff = () => {
     Globals.token = '';
+    setVisible(false);
+    setAuthAreaHidden(true);
     navigation.navigate('Login');
   };
 
@@ -65,11 +70,12 @@ export default function InternalMenu({
           }
         >
           {authAreaHidden && (
-            <Menu.Item onPress={navigateToLogin} title="Login" />
+            <>
+              <Menu.Item onPress={navigateToLogin} title="Login" />
+              <Menu.Item onPress={navigateToUserAdd} title="New User" />
+            </>
           )}
-          {!authAreaHidden && (
-            <Menu.Item onPress={navigateToLogoff} title="Logout" />
-          )}
+          {!authAreaHidden && <Menu.Item onPress={logoff} title="Logout" />}
         </Menu>
       </View>
     </View>

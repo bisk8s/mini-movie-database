@@ -13,6 +13,15 @@ export default {
           }
         }
       },
+      UserAdd: {
+        screens: {
+          MainUserAdd: {
+            screens: {
+              MainUserAdd: 'main'
+            }
+          }
+        }
+      },
       Internal: {
         screens: {
           Movie: {

@@ -5,10 +5,10 @@ import qs from 'querystring';
 import LocalStorage from './LocalStorage';
 
 //#region helper
-export const getToken = async (username: string, password: string) => {
-  const token = await loginWithPassword(username, password);
+export const getToken = async (email: string, password: string) => {
+  const token = await loginWithPassword(email, password);
   if (token) {
-    LocalStorage.set('username', username);
+    LocalStorage.set('email', email);
     LocalStorage.set('password', password);
   }
   return token;
@@ -64,10 +64,14 @@ export type GenericError = {
   errors: { message: string }[];
 };
 
-//#region Login
+//#region User/Login
 export type LoginPasswordSuccess = {
   token: string;
   type: string;
+};
+export type UserData = {
+  email: string;
+  password: string;
 };
 export async function loginWithPassword(
   email: string,
@@ -82,6 +86,22 @@ export async function loginWithPassword(
     .then(response => {
       const { token } = <LoginPasswordSuccess>response;
       return token;
+    })
+    .catch(e => {
+      Alert.alert('Login failed', 'Server responded with: \n' + e);
+      return null;
+    });
+}
+
+export async function addUser(user: UserData): Promise<UserData | null> {
+  const data = getFormData(user);
+  const options: RequestInit = {
+    method: 'POST',
+    body: data
+  };
+  return fetchJSON<UserData>('user', options)
+    .then(response => {
+      return <UserData>response;
     })
     .catch(e => {
       Alert.alert('Login failed', 'Server responded with: \n' + e);
@@ -166,6 +186,23 @@ export async function getPeople(
     return null;
   }
 }
+export async function addPerson(
+  person: PersonData
+): Promise<PersonData | null> {
+  const data = getFormData(person);
+  const options: RequestInit = {
+    method: 'POST',
+    body: data
+  };
+  return fetchJSON<PersonData>('person', options)
+    .then(response => {
+      return <PersonData>response;
+    })
+    .catch(e => {
+      Alert.alert('Login failed', 'Server responded with: \n' + e);
+      return null;
+    });
+}
 //#endregion
 
 //#region Movie
@@ -190,5 +227,20 @@ export async function getMovies(
     Alert.alert('Login failed', 'Server responded with: \n' + e);
     return null;
   }
+}
+export async function addMovie(movie: MovieData): Promise<MovieData | null> {
+  const data = getFormData(movie);
+  const options: RequestInit = {
+    method: 'POST',
+    body: data
+  };
+  return fetchJSON<MovieData>('movie', options)
+    .then(response => {
+      return response;
+    })
+    .catch(e => {
+      Alert.alert('Login failed', 'Server responded with: \n' + e);
+      return null;
+    });
 }
 //#endregion

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import { StyleSheet, Dimensions } from 'react-native';
 import { Button } from 'react-native-paper';
@@ -8,34 +8,26 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList } from '../types';
 import { rspHeight } from '../utils/Responsive';
 import Logo from '../components/Logo';
-
-import { getToken } from '../services/Api';
+import { addUser } from '../services/Api';
 import LocalStorage from '../services/LocalStorage';
-import Globals from '../utils/Globals';
 
 const { width, height } = Dimensions.get('screen');
 type ScreenProps = StackScreenProps<RootStackParamList>;
-export default function LoginScreen({ navigation }: ScreenProps) {
+export default function UserAddScreen({ navigation }: ScreenProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const fetchUserInfo = async () => {
-    const user = await LocalStorage.get('email');
-    const pass = await LocalStorage.get('password');
-    setEmail(user);
-    setPassword(pass);
-  };
-
-  useEffect(() => {
-    fetchUserInfo();
-  }, []);
-
-  const onPressLoginButton = async () => {
-    const token = await getToken(email, password);
-    if (token) {
-      Globals.token = token;
-      navigation.navigate('Internal');
-    }
+  const onPressAddButton = async () => {
+    addUser({
+      email,
+      password
+    }).then(user => {
+      if (user) {
+        LocalStorage.set('email', email);
+        LocalStorage.set('password', password);
+        navigation.navigate('Login');
+      }
+    });
   };
 
   const onPressBackButton = async () => {
@@ -67,9 +59,9 @@ export default function LoginScreen({ navigation }: ScreenProps) {
         <Button
           mode="contained"
           labelStyle={styles.loginButtonLabel}
-          onPress={onPressLoginButton}
+          onPress={onPressAddButton}
         >
-          Login
+          Sing Up
         </Button>
         <View style={styles.spacer} />
         <Button
