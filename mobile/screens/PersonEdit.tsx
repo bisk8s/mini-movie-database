@@ -58,7 +58,7 @@ export default function PersonEditScreen({ route }: ScreenProps) {
         moviesAsDirector
       ).then(person => {
         Alert.alert(
-          'Person Added',
+          'Edit Added',
           `${person?.first_name} ${person?.last_name} added`
         );
         navigation.goBack();
