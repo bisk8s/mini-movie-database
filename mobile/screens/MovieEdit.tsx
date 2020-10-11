@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Alert, StyleSheet, ScrollView } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import _ from 'lodash';
@@ -9,13 +9,19 @@ import RoundedContainer from '../components/RoundedContainer';
 
 import AppbarHeader from '../components/AppbarHeader';
 import GradientButton from '../components/GradientButton';
-import { addMovie, PersonData } from '../services/Api';
+import { editMovie, getMovie, MovieData, PersonData } from '../services/Api';
 import Globals from '../utils/Globals';
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation } from '@react-navigation/native';
 import { PersonForm } from '../components/PersonForm';
+import { MovieTabParamList } from '../types';
 
-export default function MovieAddScreen() {
+type ScreenProps = {
+  route: RouteProp<MovieTabParamList, 'MovieEdit'>;
+};
+export default function MovieEditScreen({ route }: ScreenProps) {
   const navigation = useNavigation();
+
+  const [movieId, setMovieId] = useState(-1);
   const [title, setTitle] = useState('');
   const [releaseYear, setReleaseYear] = useState('');
 
@@ -23,10 +29,25 @@ export default function MovieAddScreen() {
   const [producers, setProducers] = useState<PersonData[]>([]);
   const [directors, setdirectors] = useState<PersonData[]>([]);
 
+  useEffect(() => {
+    getMovie(route.params.movie.id).then(movie => {
+      if (movie) {
+        setMovieId(movie.id);
+        setTitle(movie.title);
+        setReleaseYear(movie.release_year.toString());
+
+        movie.casting && setCasting(movie.casting);
+        movie.producers && setProducers(movie.producers);
+        movie.directors && setdirectors(movie.directors);
+      }
+    });
+  }, []);
+
   const onPressAdd = () => {
     const { token } = Globals;
     if (title.length && releaseYear.length) {
-      addMovie(
+      editMovie(
+        movieId,
         title,
         parseFloat(releaseYear),
         token,
@@ -44,7 +65,7 @@ export default function MovieAddScreen() {
 
   return (
     <View style={styles.container}>
-      <AppbarHeader title={'Add Movie'} goBack={navigation.goBack} />
+      <AppbarHeader title={'Edit Movie'} goBack={navigation.goBack} />
       <RoundedContainer style={{ overflow: 'visible' }}>
         <ScrollView>
           <TextInput

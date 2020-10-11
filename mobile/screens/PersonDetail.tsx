@@ -119,7 +119,7 @@ export default function PersonDetailScreen({ route }: ScreenProps) {
               icon="account-edit"
               text="Edit"
               onPress={() => {
-                navigation.navigate('PersonEdit', person);
+                navigation.navigate('PersonEdit', { person });
               }}
             />
 

@@ -15,11 +15,13 @@ export type BottomTabParamList = {
 export type MovieTabParamList = {
   MovieHome: undefined;
   MovieDetail: { movie: MovieData };
+  MovieEdit: { movie: MovieData };
   MovieAdd: undefined;
 };
 
 export type PersonTabParamList = {
   PersonHome: undefined;
   PersonDetail: { person: PersonData };
+  PersonEdit: { person: PersonData };
   PersonAdd: undefined;
 };

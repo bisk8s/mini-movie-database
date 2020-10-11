@@ -28,6 +28,7 @@ export default {
             screens: {
               MovieHome: 'MovieHome',
               MovieDetail: 'MovieDetail',
+              MovieEdit: 'MovieEdit',
               MovieAdd: 'MovieAdd'
             }
           },
@@ -35,6 +36,7 @@ export default {
             screens: {
               PersonHome: 'PersonHome',
               PersonDetail: 'PersonDetail',
+              PersonEdit: 'PersonEdit',
               PersonAdd: 'PersonAdd'
             }
           }

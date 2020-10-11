@@ -1,26 +1,19 @@
 import React from 'react';
-import {
-  createStackNavigator,
-  StackNavigationProp
-} from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/stack';
 
 import PersonHomeScreen from '../screens/PersonHome';
 import PersonDetailScreen from '../screens/PersonDetail';
 
-import { BottomTabParamList, PersonTabParamList } from '../types';
+import { PersonTabParamList } from '../types';
 
 import PersonAddScreen from '../screens/PersonAdd';
-import { RouteProp, useNavigation } from '@react-navigation/native';
 
 import _ from 'lodash';
+import PersonEditScreen from '../screens/PersonEdit';
 
 const StackNavigator = createStackNavigator<PersonTabParamList>();
 
-type Props = {
-  route: RouteProp<BottomTabParamList, 'PersonTab'>;
-  navigation: StackNavigationProp<BottomTabParamList>;
-};
-export function PersonTabStackNavigator({ navigation, route }: Props) {
+export function PersonTabStackNavigator() {
   return (
     <StackNavigator.Navigator screenOptions={{ headerShown: false }}>
       <StackNavigator.Screen name="PersonHome" component={PersonHomeScreen} />
@@ -29,6 +22,7 @@ export function PersonTabStackNavigator({ navigation, route }: Props) {
         component={PersonDetailScreen}
       />
       <StackNavigator.Screen name="PersonAdd" component={PersonAddScreen} />
+      <StackNavigator.Screen name="PersonEdit" component={PersonEditScreen} />
     </StackNavigator.Navigator>
   );
 }

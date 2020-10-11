@@ -114,7 +114,7 @@ export default function MovieDetailScreen({ route }: ScreenProps) {
               icon="file-document-box-outline"
               text="Edit"
               onPress={() => {
-                navigation.navigate('MovieEdit', movie);
+                navigation.navigate('MovieEdit', { movie });
               }}
             />
 

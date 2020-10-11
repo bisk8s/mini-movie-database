@@ -241,6 +241,45 @@ export async function addPerson(
       return null;
     });
 }
+export async function editPerson(
+  id: number,
+
+  firstName: string,
+  lastName: string,
+  aliases: string,
+  token: string,
+
+  moviesAsActor?: MovieData[],
+  moviesAsProducer?: MovieData[],
+  moviesAsDirector?: MovieData[]
+): Promise<PersonData | null> {
+  const data = getFormData({
+    id,
+
+    firstName,
+    lastName,
+    aliases,
+
+    moviesAsActor: (moviesAsActor || []).map(m => m.id).join(),
+    moviesAsProducer: (moviesAsProducer || []).map(m => m.id).join(),
+    moviesAsDirector: (moviesAsDirector || []).map(m => m.id).join()
+  });
+  const options: RequestInit = {
+    method: 'PUT',
+    body: data,
+    headers: {
+      authorization: `Bearer ${token}`
+    }
+  };
+  return fetchJSON<PersonData>('person', options)
+    .then(response => {
+      return <PersonData>response;
+    })
+    .catch(e => {
+      Alert.alert('Login failed', 'Server responded with: \n' + e);
+      return null;
+    });
+}
 export async function removePerson(
   id: number,
   token: string
@@ -298,6 +337,44 @@ export async function getMovie(id: number): Promise<MovieData | null> {
   }
 }
 export async function addMovie(
+  title: string,
+  releaseYear: number,
+  token: string,
+
+  casting?: PersonData[],
+  producers?: PersonData[],
+  directors?: PersonData[]
+): Promise<MovieData | null> {
+  const form = {
+    title,
+    releaseYear,
+    casting: (casting || []).map(p => p.id).join(),
+    producers: (producers || []).map(p => p.id).join(),
+    directors: (directors || []).map(p => p.id).join()
+  };
+
+  console.log(form.casting);
+
+  const data = getFormData(form);
+  const options: RequestInit = {
+    method: 'POST',
+    body: data,
+    headers: {
+      authorization: `Bearer ${token}`
+    }
+  };
+  return fetchJSON<MovieData>('movie', options)
+    .then(response => {
+      return response;
+    })
+    .catch(e => {
+      Alert.alert('Login failed', 'Server responded with: \n' + e);
+      return null;
+    });
+}
+export async function editMovie(
+  id: number,
+
   title: string,
   releaseYear: number,
   token: string,
