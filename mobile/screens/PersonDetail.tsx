@@ -11,12 +11,13 @@ import { PersonTabParamList } from '../types';
 import OptionButton from '../components/OptionButton';
 import { RouteProp, useNavigation } from '@react-navigation/native';
 import Globals from '../utils/Globals';
-import { PersonData } from '../services/Api';
+import { getPerson, PersonData } from '../services/Api';
 import _ from 'lodash';
 import {
   Button,
   Chip,
   Dialog,
+  Divider,
   Paragraph,
   Portal,
   Title
@@ -49,6 +50,12 @@ export default function PersonDetailScreen({ route }: ScreenProps) {
   const fetchToken = async () => {
     const { token } = Globals;
     setAuthAreaHidden(!(token && token.length > 0));
+
+    getPerson(route.params.person.id).then(p => {
+      if (p) {
+        setPerson(p);
+      }
+    });
   };
 
   const Movies = ({ type }: MoviesProps) => {
@@ -86,13 +93,19 @@ export default function PersonDetailScreen({ route }: ScreenProps) {
         <Title>{person?.last_name}</Title>
         <Paragraph>Aliases</Paragraph>
         <Title>{person?.aliases.join(', ')}</Title>
+        <Divider />
 
         <Paragraph>Movies as Actor</Paragraph>
         <Movies type="moviesAsActor" />
+        <Divider />
+
         <Paragraph>Movies as Director</Paragraph>
         <Movies type="moviesAsDirector" />
+        <Divider />
+
         <Paragraph>Movies as Producer</Paragraph>
         <Movies type="moviesAsProducer" />
+        <Divider />
 
         <Collapsible collapsed={authAreaHidden}>
           <DefaultView style={styles.buttonsWrapper}>
@@ -138,8 +151,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-around',
-    paddingTop: rspHeight(24)
+    paddingTop: rspHeight(48)
   },
 
-  chipsView: { flexDirection: 'row' }
+  chipsView: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    marginVertical: rspHeight(24)
+  }
 });

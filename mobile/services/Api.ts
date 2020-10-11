@@ -186,6 +186,20 @@ export async function getPeople(
     return null;
   }
 }
+export async function getPerson(id: number): Promise<PersonData | null> {
+  const queryString = qs.encode({ id });
+  const options: RequestInit = { method: 'GET' };
+  try {
+    const response = await fetchJSON<PersonData>(
+      `person?${queryString}`,
+      options
+    );
+    return <PersonData>response;
+  } catch (e) {
+    Alert.alert('Login failed', 'Server responded with: \n' + e);
+    return null;
+  }
+}
 export async function addPerson(
   firstName: string,
   lastName: string,
@@ -229,6 +243,20 @@ export async function getMovies(
       options
     );
     return <MoviesResponseData>response;
+  } catch (e) {
+    Alert.alert('Login failed', 'Server responded with: \n' + e);
+    return null;
+  }
+}
+export async function getMovie(id: number): Promise<MovieData | null> {
+  const queryString = qs.encode({ id });
+  const options: RequestInit = { method: 'GET' };
+  try {
+    const response = await fetchJSON<MovieData>(
+      `movie?${queryString}`,
+      options
+    );
+    return <MovieData>response;
   } catch (e) {
     Alert.alert('Login failed', 'Server responded with: \n' + e);
     return null;

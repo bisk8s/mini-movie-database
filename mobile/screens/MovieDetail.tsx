@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View as DefaultView } from 'react-native';
-import { StackNavigationProp } from '@react-navigation/stack';
 
 import { View } from '../components/Themed';
 import RoundedContainer from '../components/RoundedContainer';
@@ -11,12 +10,13 @@ import { MovieTabParamList } from '../types';
 import OptionButton from '../components/OptionButton';
 import Globals from '../utils/Globals';
 import { RouteProp, useNavigation } from '@react-navigation/native';
-import { MovieData } from '../services/Api';
+import { getMovie, MovieData } from '../services/Api';
 import Collapsible from 'react-native-collapsible';
 import {
   Button,
   Chip,
   Dialog,
+  Divider,
   Paragraph,
   Portal,
   Title
@@ -40,13 +40,19 @@ export default function MovieDetailScreen({ route }: ScreenProps) {
 
   useEffect(() => {
     setMovie(route.params.movie);
-    navigation.addListener('focus', () => fetchToken());
-    fetchToken();
+    navigation.addListener('focus', () => fetchData());
+    fetchData();
   }, []);
 
-  const fetchToken = async () => {
+  const fetchData = async () => {
     const { token } = Globals;
     setAuthAreaHidden(!(token && token.length > 0));
+
+    getMovie(route.params.movie.id).then(m => {
+      if (m) {
+        setMovie(m);
+      }
+    });
   };
 
   const People = ({ type }: PeopleProps) => {
@@ -81,14 +87,19 @@ export default function MovieDetailScreen({ route }: ScreenProps) {
         <Title>
           {movie?.release_year} ({movie?.releaseYearRoman})
         </Title>
+        <Divider />
+
         <Paragraph>Casting</Paragraph>
         <People type="casting" />
+        <Divider />
 
         <Paragraph>Producers</Paragraph>
         <People type="directors" />
+        <Divider />
 
         <Paragraph>Directors</Paragraph>
         <People type="producers" />
+        <Divider />
 
         <Collapsible collapsed={authAreaHidden}>
           <DefaultView style={styles.buttonsWrapper}>
@@ -134,8 +145,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-around',
-    paddingTop: rspHeight(24)
+    paddingTop: rspHeight(48)
   },
 
-  chipsView: { flexDirection: 'row' }
+  chipsView: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    marginVertical: rspHeight(24)
+  }
 });
