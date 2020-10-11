@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View as DefaultView } from 'react-native';
-import { StackNavigationProp } from '@react-navigation/stack';
 
 import { View } from '../components/Themed';
 import RoundedContainer from '../components/RoundedContainer';
@@ -11,7 +10,7 @@ import { PersonTabParamList } from '../types';
 import OptionButton from '../components/OptionButton';
 import { RouteProp, useNavigation } from '@react-navigation/native';
 import Globals from '../utils/Globals';
-import { getPerson, PersonData } from '../services/Api';
+import { getPerson, PersonData, removePerson } from '../services/Api';
 import _ from 'lodash';
 import {
   Button,
@@ -39,7 +38,12 @@ export default function PersonDetailScreen({ route }: ScreenProps) {
 
   const showDialog = () => setVisible(true);
   const hideDialog = () => setVisible(false);
-  const deleteItem = () => setVisible(false);
+  const deleteItem = () => {
+    const { token } = Globals;
+    if (person) removePerson(person.id, token);
+    setVisible(false);
+    navigation.goBack();
+  };
 
   useEffect(() => {
     setPerson(route.params.person);

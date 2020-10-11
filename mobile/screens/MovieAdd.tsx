@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { Alert, StyleSheet } from 'react-native';
 import { TextInput } from 'react-native-paper';
-import { StackNavigationProp } from '@react-navigation/stack';
 
 import { View, Spacer } from '../components/Themed';
-import { MovieTabParamList } from '../types';
 
 import RoundedContainer from '../components/RoundedContainer';
 

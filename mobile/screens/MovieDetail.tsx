@@ -10,7 +10,7 @@ import { MovieTabParamList } from '../types';
 import OptionButton from '../components/OptionButton';
 import Globals from '../utils/Globals';
 import { RouteProp, useNavigation } from '@react-navigation/native';
-import { getMovie, MovieData } from '../services/Api';
+import { getMovie, MovieData, removeMovie } from '../services/Api';
 import Collapsible from 'react-native-collapsible';
 import {
   Button,
@@ -36,7 +36,12 @@ export default function MovieDetailScreen({ route }: ScreenProps) {
 
   const showDialog = () => setVisible(true);
   const hideDialog = () => setVisible(false);
-  const deleteItem = () => setVisible(false);
+  const deleteItem = () => {
+    const { token } = Globals;
+    if (movie) removeMovie(movie.id, token);
+    setVisible(false);
+    navigation.goBack();
+  };
 
   useEffect(() => {
     setMovie(route.params.movie);

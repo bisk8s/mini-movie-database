@@ -34,12 +34,14 @@ export default class MoviesController {
   }
   public async byId({ request }) {
     const { id } = request.only('id');
-    return Movie.query()
-      .where({ id })
-      .preload('casting')
-      .preload('producers')
-      .preload('directors')
-      .first();
+    return (
+      Movie.query()
+        .where({ id })
+        .preload('casting')
+        .preload('producers')
+        .preload('directors')
+        .first() || {}
+    );
   }
   public async store({ request, auth }: HttpContextContract) {
     await auth.authenticate();

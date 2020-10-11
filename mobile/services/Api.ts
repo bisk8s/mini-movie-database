@@ -19,6 +19,10 @@ type AuthError = {
   Message: string;
 };
 
+type DeletedData = {
+  deletedId: number;
+};
+
 //#region Config
 export const API_PROTOCOL = 'http';
 export const API_DOMAIN = '192.168.1.56:3333';
@@ -48,7 +52,9 @@ async function fetchJSON<T>(path: string, options: RequestInit): Promise<T> {
       return data;
     })
     .catch(e => {
-      Alert.alert('Error', 'O serviço respondeu com: \n\n' + e);
+      console.log(`[${moment().format()}|${options.method}]`, jsonPath);
+
+      Alert.alert('Error', 'Server response: \n\n' + e);
       return null;
     });
 }
@@ -223,6 +229,23 @@ export async function addPerson(
       return null;
     });
 }
+export async function removePerson(
+  id: number,
+  token: string
+): Promise<DeletedData> {
+  const form = { id };
+  const data = getFormData(form);
+  const options: RequestInit = {
+    method: 'DELETE',
+    body: data,
+    headers: {
+      authorization: `Bearer ${token}`
+    }
+  };
+  return fetchJSON<DeletedData>('person', options).then(response => {
+    return response;
+  });
+}
 //#endregion
 
 //#region Movie
@@ -284,5 +307,22 @@ export async function addMovie(
       Alert.alert('Login failed', 'Server responded with: \n' + e);
       return null;
     });
+}
+export async function removeMovie(
+  id: number,
+  token: string
+): Promise<DeletedData> {
+  const form = { id };
+  const data = getFormData(form);
+  const options: RequestInit = {
+    method: 'DELETE',
+    body: data,
+    headers: {
+      authorization: `Bearer ${token}`
+    }
+  };
+  return fetchJSON<DeletedData>('movie', options).then(response => {
+    return response;
+  });
 }
 //#endregion
