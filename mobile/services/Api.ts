@@ -30,7 +30,7 @@ export const API_URL = `${API_PROTOCOL}://${API_DOMAIN}`;
 async function fetchJSON<T>(path: string, options: RequestInit): Promise<T> {
   const basePath = API_URL;
   const jsonPath = [basePath, path].join('/');
-  // console.log(`[${moment().format()}|${options.method}]`, jsonPath);
+  console.log(`[${moment().format()}|${options.method}]`, jsonPath);
   // console.log('[REQ>>]', JSON.stringify(options, null, 4));
   return fetch(jsonPath, options)
     .then(response => {
@@ -40,7 +40,7 @@ async function fetchJSON<T>(path: string, options: RequestInit): Promise<T> {
     .then(data => {
       //DEBUG RESPONSE
       // console.log(`[${moment().format()}|${options.method}]`, jsonPath);
-      // console.log('[RES>>]', JSON.stringify(data, null, 4));
+      console.log('[RES>>]', JSON.stringify(data, null, 4));
       const message = get(<AuthError>data, 'Message', false);
       if (message) {
         Alert.alert('Erro de Autorização', message);
@@ -187,12 +187,18 @@ export async function getPeople(
   }
 }
 export async function addPerson(
-  person: PersonData
+  firstName: string,
+  lastName: string,
+  aliases: string,
+  token: string
 ): Promise<PersonData | null> {
-  const data = getFormData(person);
+  const data = getFormData({ firstName, lastName, aliases });
   const options: RequestInit = {
     method: 'POST',
-    body: data
+    body: data,
+    headers: {
+      authorization: `Bearer ${token}`
+    }
   };
   return fetchJSON<PersonData>('person', options)
     .then(response => {

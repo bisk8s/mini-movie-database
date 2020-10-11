@@ -34,13 +34,19 @@ export default function MovieAdddScreen() {
     <View style={styles.container}>
       <AppbarHeader title={'Add Movie'} goBack={navigation.goBack} />
       <RoundedContainer style={{ overflow: 'visible' }}>
-        <TextInput mode="outlined" label="Title" onChangeText={setTitle} />
+        <TextInput
+          mode="outlined"
+          label="Title"
+          onChangeText={setTitle}
+          value={title}
+        />
         <Spacer />
         <TextInput
           mode="outlined"
           label="Release Year"
           keyboardType="numeric"
           onChangeText={setReleaseYear}
+          value={releaseYear}
         />
         <Spacer />
         <GradientButton
