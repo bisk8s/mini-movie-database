@@ -30,7 +30,7 @@ export const API_URL = `${API_PROTOCOL}://${API_DOMAIN}`;
 async function fetchJSON<T>(path: string, options: RequestInit): Promise<T> {
   const basePath = API_URL;
   const jsonPath = [basePath, path].join('/');
-  console.log(`[${moment().format()}|${options.method}]`, jsonPath);
+  // console.log(`[${moment().format()}|${options.method}]`, jsonPath);
   // console.log('[REQ>>]', JSON.stringify(options, null, 4));
   return fetch(jsonPath, options)
     .then(response => {
@@ -234,8 +234,6 @@ export async function addMovie(
   token: string
 ): Promise<MovieData | null> {
   const form = { title, releaseYear };
-  console.log(form);
-
   const data = getFormData(form);
   const options: RequestInit = {
     method: 'POST',

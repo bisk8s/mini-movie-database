@@ -12,10 +12,11 @@ import Logo from '../components/Logo';
 import { getToken } from '../services/Api';
 import LocalStorage from '../services/LocalStorage';
 import Globals from '../utils/Globals';
+import { useNavigation } from '@react-navigation/native';
 
 const { width, height } = Dimensions.get('screen');
-type ScreenProps = StackScreenProps<RootStackParamList>;
-export default function LoginScreen({ navigation }: ScreenProps) {
+export default function LoginScreen() {
+  const navigation = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 

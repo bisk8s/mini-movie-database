@@ -16,11 +16,10 @@ import AppbarHeader from '../components/AppbarHeader';
 import Collapsible from 'react-native-collapsible';
 import { PersonData, MovieData, getMovies } from '../services/Api';
 import Globals from '../utils/Globals';
+import { useNavigation } from '@react-navigation/native';
 
-type MovieHomeScreenProps = {
-  navigation: StackNavigationProp<MovieTabParamList>;
-};
-export default function MovieHomeScreen({ navigation }: MovieHomeScreenProps) {
+export default function MovieHomeScreen() {
+  const navigation = useNavigation();
   const [authAreaHidden, setAuthAreaHidden] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(1);
@@ -104,31 +103,8 @@ export default function MovieHomeScreen({ navigation }: MovieHomeScreenProps) {
             let props: CardProps = {
               title: movie.title,
               subtitle: `${movie.release_year} (${movie.releaseYearRoman})`,
-              relationships: [],
-              onPress: () => navigation.navigate('MovieDetail')
+              onPress: () => navigation.navigate('MovieDetail', { movie })
             };
-
-            if (movie.casting?.length) {
-              props.relationships.push({
-                title: 'Casting',
-                subitems: personTosubItem(movie.casting)
-              });
-            }
-
-            if (movie.producers?.length) {
-              props.relationships.push({
-                title: 'Producers',
-                subitems: personTosubItem(movie.producers)
-              });
-            }
-
-            if (movie.directors?.length) {
-              props.relationships.push({
-                title: 'Directors',
-                subitems: personTosubItem(movie.directors)
-              });
-            }
-
             return <Card key={movie.id.toString()} {...props} />;
           })}
           <Collapsible collapsed={loadMoreButtonHidden}>

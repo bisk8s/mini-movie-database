@@ -2,27 +2,27 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, ScrollView, RefreshControl } from 'react-native';
 import { Searchbar } from 'react-native-paper';
 import { StackNavigationProp } from '@react-navigation/stack';
+import Collapsible from 'react-native-collapsible';
+import { RouteProp, useNavigation } from '@react-navigation/native';
 import _ from 'lodash';
-
-import { View } from '../components/Themed';
-import { rspHeight } from '../utils/Responsive';
-import { PersonTabParamList } from '../types';
 
 import RoundedContainer from '../components/RoundedContainer';
 import GradientButton from '../components/GradientButton';
 import Card, { CardProps } from '../components/Card';
 import AppbarHeader from '../components/AppbarHeader';
 
-import Collapsible from 'react-native-collapsible';
-import { getPeople, MovieData, PersonData } from '../services/Api';
 import Globals from '../utils/Globals';
 
+import { View } from '../components/Themed';
+import { rspHeight } from '../utils/Responsive';
+import { PersonTabParamList } from '../types';
+import { getPeople, MovieData, PersonData } from '../services/Api';
+
 type PersonHomeScreenProps = {
-  navigation: StackNavigationProp<PersonTabParamList>;
+  route: RouteProp<PersonTabParamList, 'PersonHome'>;
 };
-export default function PersonHomeScreen({
-  navigation
-}: PersonHomeScreenProps) {
+export default function PersonHomeScreen({ route }: PersonHomeScreenProps) {
+  const navigation = useNavigation();
   const [authAreaHidden, setAuthAreaHidden] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(1);
@@ -33,6 +33,14 @@ export default function PersonHomeScreen({
   useEffect(() => {
     navigation.addListener('focus', () => fetchPeople());
     fetchPeople();
+
+    console.log(route);
+
+    const person = _.get(route, ['params', 'person']);
+    if (person !== undefined) {
+      console.log('person:', person.first_name);
+      navigation.navigate('PersonDetail', { person });
+    }
   }, []);
 
   const fetchPeople = async (sq?: string) => {
@@ -108,30 +116,8 @@ export default function PersonHomeScreen({
             let props: CardProps = {
               title: `${person.first_name} ${person.last_name}`,
               subtitle: person.aliases.join(),
-              relationships: [],
-              onPress: () => navigation.navigate('PersonDetail')
+              onPress: () => navigation.navigate('PersonDetail', { person })
             };
-
-            if (person.moviesAsActor?.length) {
-              props.relationships.push({
-                title: 'Acted in',
-                subitems: movieTosubItem(person.moviesAsActor)
-              });
-            }
-
-            if (person.moviesAsProducer?.length) {
-              props.relationships.push({
-                title: 'Produced',
-                subitems: movieTosubItem(person.moviesAsProducer)
-              });
-            }
-
-            if (person.moviesAsDirector?.length) {
-              props.relationships.push({
-                title: 'Directed',
-                subitems: movieTosubItem(person.moviesAsDirector)
-              });
-            }
 
             return <Card key={key.toString()} {...props} />;
           })}

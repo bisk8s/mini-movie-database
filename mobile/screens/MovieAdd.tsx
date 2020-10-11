@@ -12,11 +12,10 @@ import AppbarHeader from '../components/AppbarHeader';
 import GradientButton from '../components/GradientButton';
 import { addMovie } from '../services/Api';
 import Globals from '../utils/Globals';
+import { useNavigation } from '@react-navigation/native';
 
-type ScreenProps = {
-  navigation: StackNavigationProp<MovieTabParamList>;
-};
-export default function MovieAdddScreen({ navigation }: ScreenProps) {
+export default function MovieAdddScreen() {
+  const navigation = useNavigation();
   const [title, setTitle] = useState('');
   const [releaseYear, setReleaseYear] = useState('');
 

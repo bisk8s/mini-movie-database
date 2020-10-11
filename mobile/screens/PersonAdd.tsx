@@ -10,11 +10,10 @@ import RoundedContainer from '../components/RoundedContainer';
 
 import AppbarHeader from '../components/AppbarHeader';
 import GradientButton from '../components/GradientButton';
+import { useNavigation } from '@react-navigation/native';
 
-type ScreenProps = {
-  navigation: StackNavigationProp<PersonTabParamList>;
-};
-export default function AddScreen({ navigation }: ScreenProps) {
+export default function AddScreen() {
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <AppbarHeader title={'Add Person'} goBack={navigation.goBack} />

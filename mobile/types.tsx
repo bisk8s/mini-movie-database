@@ -1,3 +1,5 @@
+import { MovieData, PersonData } from './services/Api';
+
 export type RootStackParamList = {
   Internal: undefined;
   UserAdd: undefined;
@@ -12,12 +14,12 @@ export type BottomTabParamList = {
 
 export type MovieTabParamList = {
   MovieHome: undefined;
-  MovieDetail: undefined;
+  MovieDetail: { movie: MovieData };
   MovieAdd: undefined;
 };
 
 export type PersonTabParamList = {
   PersonHome: undefined;
-  PersonDetail: undefined;
+  PersonDetail: { person: PersonData };
   PersonAdd: undefined;
 };

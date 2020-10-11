@@ -4,16 +4,16 @@ import { StyleSheet, Dimensions } from 'react-native';
 import { Button } from 'react-native-paper';
 
 import { View, TextInput } from '../components/Themed';
-import { StackScreenProps } from '@react-navigation/stack';
-import { RootStackParamList } from '../types';
 import { rspHeight } from '../utils/Responsive';
 import Logo from '../components/Logo';
 import { addUser } from '../services/Api';
 import LocalStorage from '../services/LocalStorage';
+import { useNavigation } from '@react-navigation/native';
 
 const { width, height } = Dimensions.get('screen');
-type ScreenProps = StackScreenProps<RootStackParamList>;
-export default function UserAddScreen({ navigation }: ScreenProps) {
+
+export default function UserAddScreen() {
+  const navigation = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
