@@ -210,9 +210,21 @@ export async function addPerson(
   firstName: string,
   lastName: string,
   aliases: string,
-  token: string
+  token: string,
+
+  moviesAsActor?: MovieData[],
+  moviesAsProducer?: MovieData[],
+  moviesAsDirector?: MovieData[]
 ): Promise<PersonData | null> {
-  const data = getFormData({ firstName, lastName, aliases });
+  const data = getFormData({
+    firstName,
+    lastName,
+    aliases,
+
+    moviesAsActor: (moviesAsActor || []).map(m => m.id).join(),
+    moviesAsProducer: (moviesAsProducer || []).map(m => m.id).join(),
+    moviesAsDirector: (moviesAsDirector || []).map(m => m.id).join()
+  });
   const options: RequestInit = {
     method: 'POST',
     body: data,

@@ -49,10 +49,8 @@ export default class PeopleController {
   }
   public async store({ request, auth }: HttpContextContract) {
     await auth.authenticate();
-    const data = request.only([
-      'lastName',
-      'firstName',
-      'aliases',
+    const data = request.only(['lastName', 'firstName', 'aliases']);
+    const { moviesAsActor, moviesAsDirector, moviesAsProducer } = request.only([
       'moviesAsActor',
       'moviesAsDirector',
       'moviesAsProducer'
@@ -60,24 +58,24 @@ export default class PeopleController {
 
     const person = await Person.firstOrCreate(data);
     if (person) {
-      if (data.moviesAsActor) {
-        stringToArray(data.moviesAsActor).map(movieId => {
+      if (moviesAsActor) {
+        stringToArray(moviesAsActor).map(movieId => {
           MovieCast.firstOrCreate({
             personId: person.id,
             movieId: parseInt(movieId)
           });
         });
       }
-      if (data.moviesAsProducer) {
-        stringToArray(data.moviesAsProducer).map(movieId => {
+      if (moviesAsProducer) {
+        stringToArray(moviesAsProducer).map(movieId => {
           MovieProducers.firstOrCreate({
             personId: person.id,
             movieId: parseInt(movieId)
           });
         });
       }
-      if (data.moviesAsDirector) {
-        stringToArray(data.moviesAsDirector).map(movieId => {
+      if (moviesAsDirector) {
+        stringToArray(moviesAsDirector).map(movieId => {
           MovieDirectors.firstOrCreate({
             personId: person.id,
             movieId: parseInt(movieId)
