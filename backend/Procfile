@@ -1,5 +1,4 @@
 // Procfile
 
-release: ENV_SILENT=true node ace migration:run --force
-release: ENV_SILENT=true yarn install
+release: ENV_SILENT=true node ace migration:run --force && yarn install
 web: ENV_SILENT=true yarn start
