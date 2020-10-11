@@ -26,7 +26,7 @@
     "@poppinss/utils" "^2.3.0"
     semver "^7.3.2"
 
-"@adonisjs/assembler@^2.0.0":
+"@adonisjs/assembler@^2.1.5":
   version "2.1.5"
   resolved "https://registry.yarnpkg.com/@adonisjs/assembler/-/assembler-2.1.5.tgz#cdd822c11ea36b99ecf6d3db8e61321032d7a955"
   integrity sha512-PVSke7Y+G4ZKsM/SIPSJWTWNccd7zpnHH+lXD15mOQgBj0X+g4dJxrpR4pM4k4lYwfq3D5UA41oOMezGX7JBPw==
