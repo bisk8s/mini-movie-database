@@ -288,9 +288,22 @@ export async function getMovie(id: number): Promise<MovieData | null> {
 export async function addMovie(
   title: string,
   releaseYear: number,
-  token: string
+  token: string,
+
+  casting?: PersonData[],
+  producers?: PersonData[],
+  directors?: PersonData[]
 ): Promise<MovieData | null> {
-  const form = { title, releaseYear };
+  const form = {
+    title,
+    releaseYear,
+    casting: (casting || []).map(p => p.id).join(),
+    producers: (producers || []).map(p => p.id).join(),
+    directors: (directors || []).map(p => p.id).join()
+  };
+
+  console.log(form.casting);
+
   const data = getFormData(form);
   const options: RequestInit = {
     method: 'POST',

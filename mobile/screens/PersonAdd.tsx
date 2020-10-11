@@ -28,6 +28,7 @@ export default function AddScreen() {
           'Person Added',
           `${person?.first_name} ${person?.last_name} added`
         );
+        navigation.goBack();
       });
     } else {
       Alert.alert('Error', "First and Last names can't be empty");
