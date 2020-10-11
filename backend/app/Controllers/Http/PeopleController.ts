@@ -36,6 +36,15 @@ export default class PeopleController {
       .paginate(page || 1);
     return preloaded;
   }
+  public async byId({ request }) {
+    const { id } = request.only('id');
+    return Person.query()
+      .where({ id })
+      .preload('moviesAsActor')
+      .preload('moviesAsDirector')
+      .preload('moviesAsProducer')
+      .first();
+  }
   public async store({ request, auth }: HttpContextContract) {
     await auth.authenticate();
     const data = request.only([

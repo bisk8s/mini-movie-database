@@ -32,6 +32,15 @@ export default class MoviesController {
       .paginate(page || 1);
     return preloaded;
   }
+  public async byId({ request }) {
+    const { id } = request.only('id');
+    return Movie.query()
+      .where({ id })
+      .preload('casting')
+      .preload('producers')
+      .preload('directors')
+      .first();
+  }
   public async store({ request, auth }: HttpContextContract) {
     await auth.authenticate();
     const data = request.only(['title', 'releaseYear']);

@@ -26,12 +26,14 @@ Route.post('/user', 'UsersController.store');
 
 // PERSON
 Route.get('/people', 'PeopleController.index');
+Route.get('/person', 'PeopleController.byId');
 Route.post('/person', 'PeopleController.store');
 Route.put('/person', 'PeopleController.update');
 Route.delete('/person', 'PeopleController.remove');
 
 // MOVIE
 Route.get('/movies', 'MoviesController.index');
+Route.get('/movie', 'MoviesController.byId');
 Route.post('/movie', 'MoviesController.store');
 Route.put('/movie', 'MoviesController.update');
 Route.delete('/movie', 'MoviesController.remove');
