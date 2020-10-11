@@ -5,9 +5,12 @@
  * file.
  */
 
-import Env from '@ioc:Adonis/Core/Env'
-import { OrmConfig } from '@ioc:Adonis/Lucid/Orm'
-import { DatabaseConfig } from '@ioc:Adonis/Lucid/Database'
+import Env from '@ioc:Adonis/Core/Env';
+import { OrmConfig } from '@ioc:Adonis/Lucid/Orm';
+import { DatabaseConfig } from '@ioc:Adonis/Lucid/Database';
+import UrlParse from 'url-parse';
+
+const DATABASE_URL = new UrlParse(Env.get('DATABASE_URL'));
 
 const databaseConfig: DatabaseConfig & { orm: Partial<OrmConfig> } = {
   /*
@@ -37,14 +40,14 @@ const databaseConfig: DatabaseConfig & { orm: Partial<OrmConfig> } = {
     pg: {
       client: 'pg',
       connection: {
-        host: Env.get('DB_HOST', '127.0.0.1') as string,
+        host: Env.get('DB_HOST', DATABASE_URL.host) as string,
         port: Number(Env.get('DB_PORT', 5432)),
-        user: Env.get('DB_USER', 'lucid') as string,
-        password: Env.get('DB_PASSWORD', 'lucid') as string,
-        database: Env.get('DB_NAME', 'lucid') as string,
+        user: Env.get('DB_USER', DATABASE_URL.username) as string,
+        password: Env.get('DB_PASSWORD', DATABASE_URL.password) as string,
+        database: Env.get('DB_NAME', DATABASE_URL.pathname.substr(1)) as string
       },
-      healthCheck: false,
-    },
+      healthCheck: false
+    }
   },
 
   /*
@@ -59,8 +62,7 @@ const databaseConfig: DatabaseConfig & { orm: Partial<OrmConfig> } = {
   | - Or define a custom function to compute the primary key for a given model.
   |
   */
-  orm: {
-  },
-}
+  orm: {}
+};
 
-export default databaseConfig
+export default databaseConfig;
