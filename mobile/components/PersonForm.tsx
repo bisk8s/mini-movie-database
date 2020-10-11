@@ -1,22 +1,25 @@
 import React, { useState } from 'react';
-import { View as DefaultView } from 'react-native';
+import { StyleSheet, View as DefaultView } from 'react-native';
 import { Chip, Menu, TextInput } from 'react-native-paper';
 import _ from 'lodash';
 
 import { Spacer } from '../components/Themed';
 
-import { getPeople, PersonData } from '../services/Api';
+import { getPeople, PersonData, removeRelationship } from '../services/Api';
 import { rspHeight } from '../utils/Responsive';
+import Globals from '../utils/Globals';
 
 type PersonFormProps = {
   label: string;
   selectedPeople: PersonData[];
   setSelectedPeople: (people: PersonData[]) => void;
+  type: 'casting' | 'producer' | 'director';
 };
 export function PersonForm({
   label,
   selectedPeople,
-  setSelectedPeople
+  setSelectedPeople,
+  type
 }: PersonFormProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [visible, setVisible] = useState(false);
@@ -31,6 +34,18 @@ export function PersonForm({
   };
   const openMenu = () => setVisible(true);
   const closeMenu = () => setVisible(false);
+
+  const onSearchClick = (person: PersonData) => {
+    const selected = _.uniq(selectedPeople.concat([person]));
+    setSelectedPeople(selected);
+  };
+  const onChipPress = (person: PersonData) => {
+    const { token } = Globals;
+    removeRelationship(person.id, type, token);
+
+    const selected = _.without(selectedPeople, person);
+    setSelectedPeople(selected);
+  };
 
   const onChangeText = (text: string) => {
     setSearchQuery(text);
@@ -58,10 +73,7 @@ export function PersonForm({
             <Menu.Item
               key={person.id}
               title={`${person.first_name} ${person.last_name}`}
-              onPress={() => {
-                const selected = _.uniq(selectedPeople.concat([person]));
-                setSelectedPeople(selected);
-              }}
+              onPress={() => onSearchClick(person)}
             />
           );
         })}
@@ -73,14 +85,33 @@ export function PersonForm({
           justifyContent: 'space-evenly'
         }}
       >
-        {_.map(selectedPeople, person => {
-          return (
-            <Chip key={person.id}>
-              {`${person.first_name} ${person.last_name}`}
-            </Chip>
-          );
-        })}
+        <DefaultView style={styles.chipsView}>
+          {_.map(selectedPeople, person => {
+            return (
+              <Chip
+                key={person.id}
+                onPress={() => onChipPress(person)}
+                style={styles.chipStyle}
+                icon="close"
+              >
+                {`${person.first_name} ${person.last_name}`}
+              </Chip>
+            );
+          })}
+        </DefaultView>
       </DefaultView>
     </DefaultView>
   );
 }
+
+const styles = StyleSheet.create({
+  chipsView: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    flexWrap: 'wrap',
+    marginVertical: rspHeight(24)
+  },
+  chipStyle: {
+    marginVertical: rspHeight(12)
+  }
+});

@@ -43,7 +43,7 @@ export default function MovieEditScreen({ route }: ScreenProps) {
     });
   }, []);
 
-  const onPressAdd = () => {
+  const onPressSave = () => {
     const { token } = Globals;
     if (title.length && releaseYear.length) {
       editMovie(
@@ -55,7 +55,7 @@ export default function MovieEditScreen({ route }: ScreenProps) {
         producers,
         directors
       ).then(movie => {
-        Alert.alert('Movie Added', `${movie?.title} added`);
+        Alert.alert('Movie Saved', `${movie?.title} saved`);
         navigation.goBack();
       });
     } else {
@@ -88,6 +88,7 @@ export default function MovieEditScreen({ route }: ScreenProps) {
             label="Casting"
             setSelectedPeople={setCasting}
             selectedPeople={casting}
+            type="casting"
           />
           <Spacer />
 
@@ -95,6 +96,7 @@ export default function MovieEditScreen({ route }: ScreenProps) {
             label="Producers"
             setSelectedPeople={setProducers}
             selectedPeople={producers}
+            type="producer"
           />
           <Spacer />
 
@@ -102,13 +104,14 @@ export default function MovieEditScreen({ route }: ScreenProps) {
             label="Directors"
             setSelectedPeople={setdirectors}
             selectedPeople={directors}
+            type="director"
           />
           <Spacer />
 
           <GradientButton
             icon="send"
-            label="Add"
-            onPress={onPressAdd}
+            label="Update"
+            onPress={onPressSave}
             colors={['#05E560', '#04AF49']}
             labelColor={'#FFF'}
           />

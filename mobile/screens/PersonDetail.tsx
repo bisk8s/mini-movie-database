@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View as DefaultView } from 'react-native';
+import { ScrollView, StyleSheet, View as DefaultView } from 'react-native';
 
 import { View } from '../components/Themed';
 import RoundedContainer from '../components/RoundedContainer';
@@ -92,45 +92,47 @@ export default function PersonDetailScreen({ route }: ScreenProps) {
         goBack={navigation.goBack}
       />
       <RoundedContainer>
-        <Paragraph>Name</Paragraph>
-        <Title>{person?.first_name}</Title>
-        <Paragraph>Surname</Paragraph>
-        <Title>{person?.last_name}</Title>
-        <Paragraph>Aliases</Paragraph>
-        <Title>{person?.aliases.join(', ')}</Title>
-        <Divider />
+        <ScrollView>
+          <Paragraph>Name</Paragraph>
+          <Title>{person?.first_name}</Title>
+          <Paragraph>Surname</Paragraph>
+          <Title>{person?.last_name}</Title>
+          <Paragraph>Aliases</Paragraph>
+          <Title>{person?.aliases.join(', ')}</Title>
+          <Divider />
 
-        <Paragraph>Movies as Actor</Paragraph>
-        <Movies type="moviesAsActor" />
-        <Divider />
+          <Paragraph>Movies as Actor</Paragraph>
+          <Movies type="moviesAsActor" />
+          <Divider />
 
-        <Paragraph>Movies as Director</Paragraph>
-        <Movies type="moviesAsDirector" />
-        <Divider />
+          <Paragraph>Movies as Director</Paragraph>
+          <Movies type="moviesAsDirector" />
+          <Divider />
 
-        <Paragraph>Movies as Producer</Paragraph>
-        <Movies type="moviesAsProducer" />
-        <Divider />
+          <Paragraph>Movies as Producer</Paragraph>
+          <Movies type="moviesAsProducer" />
+          <Divider />
 
-        <Collapsible collapsed={authAreaHidden}>
-          <DefaultView style={styles.buttonsWrapper}>
-            <OptionButton
-              color="#E9679D"
-              icon="account-edit"
-              text="Edit"
-              onPress={() => {
-                navigation.navigate('PersonEdit', { person });
-              }}
-            />
+          <Collapsible collapsed={authAreaHidden}>
+            <DefaultView style={styles.buttonsWrapper}>
+              <OptionButton
+                color="#E9679D"
+                icon="account-edit"
+                text="Edit"
+                onPress={() => {
+                  navigation.navigate('PersonEdit', { person });
+                }}
+              />
 
-            <OptionButton
-              color="#E9679D"
-              icon="account-remove"
-              text="remove"
-              onPress={showDialog}
-            />
-          </DefaultView>
-        </Collapsible>
+              <OptionButton
+                color="#E9679D"
+                icon="account-remove"
+                text="remove"
+                onPress={showDialog}
+              />
+            </DefaultView>
+          </Collapsible>
+        </ScrollView>
       </RoundedContainer>
 
       <Portal>

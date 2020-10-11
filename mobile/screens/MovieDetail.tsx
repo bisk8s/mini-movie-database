@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View as DefaultView } from 'react-native';
+import { ScrollView, StyleSheet, View as DefaultView } from 'react-native';
 
 import { View } from '../components/Themed';
 import RoundedContainer from '../components/RoundedContainer';
@@ -87,45 +87,47 @@ export default function MovieDetailScreen({ route }: ScreenProps) {
         goBack={navigation.goBack}
       />
       <RoundedContainer>
-        <Paragraph>Title</Paragraph>
-        <Title>{movie?.title}</Title>
-        <Paragraph>Release Year</Paragraph>
-        <Title>
-          {movie?.release_year} ({movie?.releaseYearRoman})
-        </Title>
-        <Divider />
+        <ScrollView>
+          <Paragraph>Title</Paragraph>
+          <Title>{movie?.title}</Title>
+          <Paragraph>Release Year</Paragraph>
+          <Title>
+            {movie?.release_year} ({movie?.releaseYearRoman})
+          </Title>
+          <Divider />
 
-        <Paragraph>Casting</Paragraph>
-        <People type="casting" />
-        <Divider />
+          <Paragraph>Casting</Paragraph>
+          <People type="casting" />
+          <Divider />
 
-        <Paragraph>Producers</Paragraph>
-        <People type="directors" />
-        <Divider />
+          <Paragraph>Producers</Paragraph>
+          <People type="directors" />
+          <Divider />
 
-        <Paragraph>Directors</Paragraph>
-        <People type="producers" />
-        <Divider />
+          <Paragraph>Directors</Paragraph>
+          <People type="producers" />
+          <Divider />
 
-        <Collapsible collapsed={authAreaHidden}>
-          <DefaultView style={styles.buttonsWrapper}>
-            <OptionButton
-              color="#E9679D"
-              icon="file-document-box-outline"
-              text="Edit"
-              onPress={() => {
-                navigation.navigate('MovieEdit', { movie });
-              }}
-            />
+          <Collapsible collapsed={authAreaHidden}>
+            <DefaultView style={styles.buttonsWrapper}>
+              <OptionButton
+                color="#E9679D"
+                icon="file-document-box-outline"
+                text="Edit"
+                onPress={() => {
+                  navigation.navigate('MovieEdit', { movie });
+                }}
+              />
 
-            <OptionButton
-              color="#E9679D"
-              icon="file-document-box-remove-outline"
-              text="remove"
-              onPress={showDialog}
-            />
-          </DefaultView>
-        </Collapsible>
+              <OptionButton
+                color="#E9679D"
+                icon="file-document-box-remove-outline"
+                text="remove"
+                onPress={showDialog}
+              />
+            </DefaultView>
+          </Collapsible>
+        </ScrollView>
       </RoundedContainer>
 
       <Portal>

@@ -116,6 +116,27 @@ export async function addUser(user: UserData): Promise<UserData | null> {
 }
 //#endregion
 
+//#region Relationship
+export async function removeRelationship(
+  id: number,
+  type: 'casting' | 'producer' | 'director',
+  token: string
+): Promise<DeletedData> {
+  const form = { id };
+  const data = getFormData(form);
+  const options: RequestInit = {
+    method: 'DELETE',
+    body: data,
+    headers: {
+      authorization: `Bearer ${token}`
+    }
+  };
+  return fetchJSON<DeletedData>(type, options).then(response => {
+    return response;
+  });
+}
+//#endregion
+
 //#region Types
 export type PeopleResponseData = {
   meta: {

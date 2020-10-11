@@ -1,22 +1,25 @@
 import React, { useState } from 'react';
-import { View as DefaultView } from 'react-native';
+import { StyleSheet, View as DefaultView } from 'react-native';
 import { Chip, Menu, TextInput } from 'react-native-paper';
 import _ from 'lodash';
 
 import { Spacer } from '../components/Themed';
 
-import { getMovies, MovieData } from '../services/Api';
+import { getMovies, MovieData, removeRelationship } from '../services/Api';
 import { rspHeight } from '../utils/Responsive';
+import Globals from '../utils/Globals';
 
 type MovieFormProps = {
   label: string;
   selectedMovies: MovieData[];
   setSelectedMovies: (movies: MovieData[]) => void;
+  type: 'casting' | 'producer' | 'director';
 };
 export function MovieForm({
   label,
   selectedMovies,
-  setSelectedMovies
+  setSelectedMovies,
+  type
 }: MovieFormProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [visible, setVisible] = useState(false);
@@ -31,6 +34,18 @@ export function MovieForm({
   };
   const openMenu = () => setVisible(true);
   const closeMenu = () => setVisible(false);
+
+  const onSearchClick = (movie: MovieData) => {
+    const selected = _.uniq(selectedMovies.concat([movie]));
+    setSelectedMovies(selected);
+  };
+  const onChipPress = (movie: MovieData) => {
+    const { token } = Globals;
+    removeRelationship(movie.id, type, token);
+
+    const selected = _.without(selectedMovies, movie);
+    setSelectedMovies(selected);
+  };
 
   const onChangeText = (text: string) => {
     setSearchQuery(text);
@@ -58,10 +73,7 @@ export function MovieForm({
             <Menu.Item
               key={movie.id}
               title={`${movie.title} (${movie.release_year})`}
-              onPress={() => {
-                const selected = _.uniq(selectedMovies.concat([movie]));
-                setSelectedMovies(selected);
-              }}
+              onPress={() => onSearchClick(movie)}
             />
           );
         })}
@@ -73,14 +85,32 @@ export function MovieForm({
           justifyContent: 'space-evenly'
         }}
       >
-        {_.map(selectedMovies, movie => {
-          return (
-            <Chip key={movie.id}>
-              {`${movie.title} (${movie.release_year})`}
-            </Chip>
-          );
-        })}
+        <DefaultView style={styles.chipsView}>
+          {_.map(selectedMovies, movie => {
+            return (
+              <Chip
+                key={movie.id}
+                onPress={() => onChipPress(movie)}
+                icon="close"
+              >
+                {`${movie.title} (${movie.release_year})`}
+              </Chip>
+            );
+          })}
+        </DefaultView>
       </DefaultView>
     </DefaultView>
   );
 }
+
+const styles = StyleSheet.create({
+  chipsView: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    flexWrap: 'wrap',
+    marginVertical: rspHeight(24)
+  },
+  chipStyle: {
+    marginVertical: rspHeight(12)
+  }
+});

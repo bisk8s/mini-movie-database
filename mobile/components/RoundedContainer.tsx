@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 
 import { rspWidth, rspHeight } from '../utils/Responsive';
 
@@ -11,7 +11,6 @@ export default function RoundedContainer({
 }: RoundedContainerProps) {
   return (
     <View style={styles.container}>
-      <Text style={styles.powered}>Mini Movie DB</Text>
       <View style={[styles.internal, style]}>{children}</View>
     </View>
   );

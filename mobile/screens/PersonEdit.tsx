@@ -43,7 +43,7 @@ export default function PersonEditScreen({ route }: ScreenProps) {
     });
   }, []);
 
-  const onPressAdd = () => {
+  const onPressSave = () => {
     const { token } = Globals;
     if (firstName.length && lastName.length) {
       editPerson(
@@ -58,8 +58,8 @@ export default function PersonEditScreen({ route }: ScreenProps) {
         moviesAsDirector
       ).then(person => {
         Alert.alert(
-          'Edit Added',
-          `${person?.first_name} ${person?.last_name} added`
+          'Edit Saved',
+          `${person?.first_name} ${person?.last_name} saved`
         );
         navigation.goBack();
       });
@@ -70,7 +70,7 @@ export default function PersonEditScreen({ route }: ScreenProps) {
 
   return (
     <View style={styles.container}>
-      <AppbarHeader title={'Add Person'} goBack={navigation.goBack} />
+      <AppbarHeader title={'Edit Person'} goBack={navigation.goBack} />
       <RoundedContainer style={{ overflow: 'visible' }}>
         <ScrollView>
           <TextInput
@@ -100,6 +100,7 @@ export default function PersonEditScreen({ route }: ScreenProps) {
             label="Movies as Actor"
             setSelectedMovies={setMoviesAsActor}
             selectedMovies={moviesAsActor}
+            type="casting"
           />
           <Spacer />
 
@@ -107,6 +108,7 @@ export default function PersonEditScreen({ route }: ScreenProps) {
             label="Movies as Producer"
             setSelectedMovies={setMoviesAsProducer}
             selectedMovies={moviesAsProducer}
+            type="producer"
           />
           <Spacer />
 
@@ -114,13 +116,14 @@ export default function PersonEditScreen({ route }: ScreenProps) {
             label="Movies as Director"
             setSelectedMovies={setMoviesAsDirector}
             selectedMovies={moviesAsDirector}
+            type="director"
           />
           <Spacer />
 
           <GradientButton
             icon="send"
             label="Enviar"
-            onPress={onPressAdd}
+            onPress={onPressSave}
             colors={['#05E560', '#04AF49']}
             labelColor={'#FFF'}
           />
