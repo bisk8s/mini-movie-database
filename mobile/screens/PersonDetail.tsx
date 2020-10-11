@@ -69,6 +69,7 @@ export default function PersonDetailScreen({ route }: ScreenProps) {
           return (
             <Chip
               key={movie?.id}
+              style={styles.chipStyle}
               onPress={() => {
                 const parent = navigation.dangerouslyGetParent();
                 if (parent) {
@@ -117,7 +118,9 @@ export default function PersonDetailScreen({ route }: ScreenProps) {
               color="#E9679D"
               icon="account-edit"
               text="Edit"
-              onPress={() => {}}
+              onPress={() => {
+                navigation.navigate('PersonEdit', person);
+              }}
             />
 
             <OptionButton
@@ -161,6 +164,10 @@ const styles = StyleSheet.create({
   chipsView: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
+    flexWrap: 'wrap',
     marginVertical: rspHeight(24)
+  },
+  chipStyle: {
+    marginVertical: rspHeight(12)
   }
 });

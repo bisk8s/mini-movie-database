@@ -67,6 +67,7 @@ export default function MovieDetailScreen({ route }: ScreenProps) {
           return (
             <Chip
               key={person?.id}
+              style={styles.chipStyle}
               onPress={() => {
                 navigation.navigate('PersonDetail', { person });
               }}
@@ -112,7 +113,9 @@ export default function MovieDetailScreen({ route }: ScreenProps) {
               color="#E9679D"
               icon="file-document-box-outline"
               text="Edit"
-              onPress={() => {}}
+              onPress={() => {
+                navigation.navigate('MovieEdit', movie);
+              }}
             />
 
             <OptionButton
@@ -156,6 +159,10 @@ const styles = StyleSheet.create({
   chipsView: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
+    flexWrap: 'wrap',
     marginVertical: rspHeight(24)
+  },
+  chipStyle: {
+    marginVertical: rspHeight(12)
   }
 });
