@@ -13,18 +13,30 @@ import Globals from '../utils/Globals';
 import { RouteProp, useNavigation } from '@react-navigation/native';
 import { MovieData } from '../services/Api';
 import Collapsible from 'react-native-collapsible';
-import { Chip, Paragraph, Title } from 'react-native-paper';
+import {
+  Button,
+  Chip,
+  Dialog,
+  Paragraph,
+  Portal,
+  Title
+} from 'react-native-paper';
 import _ from 'lodash';
 
 type ScreenProps = {
   route: RouteProp<MovieTabParamList, 'MovieDetail'>;
 };
-type PeopleProps = { type: string };
+type PeopleProps = { type: 'casting' | 'directors' | 'producers' };
 
 export default function MovieDetailScreen({ route }: ScreenProps) {
   const navigation = useNavigation();
+  const [dialogVisible, setVisible] = React.useState(false);
   const [authAreaHidden, setAuthAreaHidden] = useState(true);
   const [movie, setMovie] = useState<MovieData | undefined>(undefined);
+
+  const showDialog = () => setVisible(true);
+  const hideDialog = () => setVisible(false);
+  const deleteItem = () => setVisible(false);
 
   useEffect(() => {
     setMovie(route.params.movie);
@@ -70,11 +82,13 @@ export default function MovieDetailScreen({ route }: ScreenProps) {
           {movie?.release_year} ({movie?.releaseYearRoman})
         </Title>
         <Paragraph>Casting</Paragraph>
-
         <People type="casting" />
 
         <Paragraph>Producers</Paragraph>
+        <People type="directors" />
+
         <Paragraph>Directors</Paragraph>
+        <People type="producers" />
 
         <Collapsible collapsed={authAreaHidden}>
           <DefaultView style={styles.buttonsWrapper}>
@@ -89,11 +103,24 @@ export default function MovieDetailScreen({ route }: ScreenProps) {
               color="#E9679D"
               icon="file-document-box-remove-outline"
               text="remove"
-              onPress={() => {}}
+              onPress={showDialog}
             />
           </DefaultView>
         </Collapsible>
       </RoundedContainer>
+
+      <Portal>
+        <Dialog visible={dialogVisible} onDismiss={hideDialog}>
+          <Dialog.Title>Confirm Deletion</Dialog.Title>
+          <Dialog.Content>
+            <Paragraph>Are you sure?</Paragraph>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={hideDialog}>Cancel</Button>
+            <Button onPress={deleteItem}>Confirm</Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
     </View>
   );
 }

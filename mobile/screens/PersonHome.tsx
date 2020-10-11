@@ -1,6 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { StyleSheet, ScrollView, RefreshControl } from 'react-native';
-import { Searchbar } from 'react-native-paper';
+import {
+  StyleSheet,
+  ScrollView,
+  RefreshControl,
+  View as DefautlView
+} from 'react-native';
+import { Button, Searchbar } from 'react-native-paper';
 import { StackNavigationProp } from '@react-navigation/stack';
 import Collapsible from 'react-native-collapsible';
 import { RouteProp, useNavigation } from '@react-navigation/native';
@@ -28,13 +33,12 @@ export default function PersonHomeScreen({ route }: PersonHomeScreenProps) {
   const [page, setPage] = useState(1);
   const [people, setPeople] = useState([] as PersonData[]);
   const [refreshing, setRefreshing] = useState(false);
-  const [loadMoreButtonHidden, setLoadMoreButtonVisible] = useState(true);
+  const [prevPageButtonHidden, setPrevPageButtonHidden] = useState(true);
+  const [nextPageButtonHidden, setNextPageButtonHidden] = useState(true);
 
   useEffect(() => {
     navigation.addListener('focus', () => fetchPeople());
     fetchPeople();
-
-    console.log(route);
 
     const person = _.get(route, ['params', 'person']);
     if (person !== undefined) {
@@ -43,26 +47,32 @@ export default function PersonHomeScreen({ route }: PersonHomeScreenProps) {
     }
   }, []);
 
-  const fetchPeople = async (sq?: string) => {
+  const fetchPeople = async (sq?: string, p?: number) => {
     const { token } = Globals;
     setAuthAreaHidden(!(token && token.length > 0));
 
     const query = sq !== undefined ? sq : searchQuery;
-    getPeople(query, page).then(response => {
+    getPeople(query, p || page).then(response => {
       if (response) {
         setPeople(response.data);
       }
       setRefreshing(false);
       if (response && response.meta) {
-        const { current_page, last_page } = response.meta;
-        setLoadMoreButtonVisible(current_page === last_page);
+        const { first_page, current_page, last_page } = response.meta;
+        setPage(current_page);
+
+        setPrevPageButtonHidden(current_page <= first_page);
+        setNextPageButtonHidden(current_page >= last_page);
       }
     });
   };
 
-  const loadMore = () => {
-    setPage(page + 1);
-    fetchPeople();
+  const prevPage = () => {
+    fetchPeople(undefined, page - 1);
+  };
+
+  const nextPage = () => {
+    fetchPeople(undefined, page + 1);
   };
 
   const onChangeSearch = (sq: string) => {
@@ -74,15 +84,6 @@ export default function PersonHomeScreen({ route }: PersonHomeScreenProps) {
     setRefreshing(true);
     fetchPeople();
   }, []);
-
-  const movieTosubItem = (movies: MovieData[]) => {
-    return _.map(movies, movie => {
-      return {
-        id: movie.id,
-        title: movie.title
-      };
-    });
-  };
 
   return (
     <View style={styles.container}>
@@ -121,15 +122,23 @@ export default function PersonHomeScreen({ route }: PersonHomeScreenProps) {
 
             return <Card key={key.toString()} {...props} />;
           })}
-          <Collapsible collapsed={loadMoreButtonHidden}>
-            <GradientButton
-              icon="plus"
-              label="Add Movie"
-              onPress={loadMore}
-              colors={['#EEEEEE', '#FFFFFF']}
-              labelColor={'#333333'}
-            />
-          </Collapsible>
+          <DefautlView
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-evenly'
+            }}
+          >
+            {!prevPageButtonHidden && (
+              <Button mode="contained" onPress={prevPage}>
+                Previous
+              </Button>
+            )}
+            {!nextPageButtonHidden && (
+              <Button mode="contained" onPress={nextPage}>
+                Next
+              </Button>
+            )}
+          </DefautlView>
         </ScrollView>
       </RoundedContainer>
     </View>

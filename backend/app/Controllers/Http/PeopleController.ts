@@ -46,7 +46,6 @@ export default class PeopleController {
       'moviesAsDirector',
       'moviesAsProducer'
     ]);
-    console.log('data', data);
 
     const person = await Person.firstOrCreate(data);
     if (person) {

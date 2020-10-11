@@ -13,17 +13,32 @@ import { RouteProp, useNavigation } from '@react-navigation/native';
 import Globals from '../utils/Globals';
 import { PersonData } from '../services/Api';
 import _ from 'lodash';
-import { Chip } from 'react-native-paper';
+import {
+  Button,
+  Chip,
+  Dialog,
+  Paragraph,
+  Portal,
+  Title
+} from 'react-native-paper';
+import Collapsible from 'react-native-collapsible';
 
 type ScreenProps = {
   route: RouteProp<PersonTabParamList, 'PersonDetail'>;
 };
-type MoviesProps = { type: string };
+type MoviesProps = {
+  type: 'moviesAsActor' | 'moviesAsDirector' | 'moviesAsProducer';
+};
 
 export default function PersonDetailScreen({ route }: ScreenProps) {
   const navigation = useNavigation();
+  const [dialogVisible, setVisible] = React.useState(false);
   const [authAreaHidden, setAuthAreaHidden] = useState(true);
   const [person, setPerson] = useState<PersonData | undefined>(undefined);
+
+  const showDialog = () => setVisible(true);
+  const hideDialog = () => setVisible(false);
+  const deleteItem = () => setVisible(false);
 
   useEffect(() => {
     setPerson(route.params.person);
@@ -39,18 +54,18 @@ export default function PersonDetailScreen({ route }: ScreenProps) {
   const Movies = ({ type }: MoviesProps) => {
     return (
       <DefaultView style={styles.chipsView}>
-        {_.map(_.get(person, type), person => {
+        {_.map(_.get(person, type), movie => {
           return (
             <Chip
-              key={person?.id}
+              key={movie?.id}
               onPress={() => {
                 const parent = navigation.dangerouslyGetParent();
                 if (parent) {
-                  parent.navigate('PersonTab', { person });
+                  parent.navigate('MovieDetail', { movie });
                 }
               }}
             >
-              {person.first_name} {person.last_name}
+              {movie.title} ({movie.release_year})
             </Chip>
           );
         })}
@@ -65,22 +80,51 @@ export default function PersonDetailScreen({ route }: ScreenProps) {
         goBack={navigation.goBack}
       />
       <RoundedContainer>
-        <DefaultView style={styles.buttonsWrapper}>
-          <OptionButton
-            color="#E9679D"
-            icon="account-edit"
-            text="Edit"
-            onPress={() => {}}
-          />
+        <Paragraph>Name</Paragraph>
+        <Title>{person?.first_name}</Title>
+        <Paragraph>Surname</Paragraph>
+        <Title>{person?.last_name}</Title>
+        <Paragraph>Aliases</Paragraph>
+        <Title>{person?.aliases.join(', ')}</Title>
 
-          <OptionButton
-            color="#E9679D"
-            icon="account-remove"
-            text="remove"
-            onPress={() => {}}
-          />
-        </DefaultView>
+        <Paragraph>Movies as Actor</Paragraph>
+        <Movies type="moviesAsActor" />
+        <Paragraph>Movies as Director</Paragraph>
+        <Movies type="moviesAsDirector" />
+        <Paragraph>Movies as Producer</Paragraph>
+        <Movies type="moviesAsProducer" />
+
+        <Collapsible collapsed={authAreaHidden}>
+          <DefaultView style={styles.buttonsWrapper}>
+            <OptionButton
+              color="#E9679D"
+              icon="account-edit"
+              text="Edit"
+              onPress={() => {}}
+            />
+
+            <OptionButton
+              color="#E9679D"
+              icon="account-remove"
+              text="remove"
+              onPress={showDialog}
+            />
+          </DefaultView>
+        </Collapsible>
       </RoundedContainer>
+
+      <Portal>
+        <Dialog visible={dialogVisible} onDismiss={hideDialog}>
+          <Dialog.Title>Confirm Deletion</Dialog.Title>
+          <Dialog.Content>
+            <Paragraph>Are you sure?</Paragraph>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={hideDialog}>Cancel</Button>
+            <Button onPress={deleteItem}>Confirm</Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
     </View>
   );
 }

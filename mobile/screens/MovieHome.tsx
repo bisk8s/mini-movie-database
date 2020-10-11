@@ -1,12 +1,16 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { StyleSheet, ScrollView, RefreshControl } from 'react-native';
-import { Searchbar } from 'react-native-paper';
-import { StackNavigationProp } from '@react-navigation/stack';
+import {
+  StyleSheet,
+  ScrollView,
+  RefreshControl,
+  View as DefautlView
+} from 'react-native';
+import { Button, Searchbar } from 'react-native-paper';
+
 import _ from 'lodash';
 
 import { View } from '../components/Themed';
 import { rspHeight } from '../utils/Responsive';
-import { MovieTabParamList } from '../types';
 
 import RoundedContainer from '../components/RoundedContainer';
 import GradientButton from '../components/GradientButton';
@@ -14,7 +18,7 @@ import Card, { CardProps } from '../components/Card';
 import AppbarHeader from '../components/AppbarHeader';
 
 import Collapsible from 'react-native-collapsible';
-import { PersonData, MovieData, getMovies } from '../services/Api';
+import { MovieData, getMovies } from '../services/Api';
 import Globals from '../utils/Globals';
 import { useNavigation } from '@react-navigation/native';
 
@@ -25,31 +29,39 @@ export default function MovieHomeScreen() {
   const [page, setPage] = useState(1);
   const [movies, setMovies] = useState([] as MovieData[]);
   const [refreshing, setRefreshing] = useState(false);
-  const [loadMoreButtonHidden, setLoadMoreButtonVisible] = useState(true);
+  const [prevPageButtonHidden, setPrevPageButtonHidden] = useState(true);
+  const [nextPageButtonHidden, setNextPageButtonHidden] = useState(true);
 
   useEffect(() => {
     navigation.addListener('focus', () => fetchMovies());
     fetchMovies();
   }, []);
 
-  const fetchMovies = async (sq?: string) => {
+  const fetchMovies = async (sq?: string, p?: number) => {
     const { token } = Globals;
     setAuthAreaHidden(!(token && token.length > 0));
 
     const query = sq !== undefined ? sq : searchQuery;
-    getMovies(query, page).then(response => {
+
+    getMovies(query, p || page).then(response => {
       response && setMovies(response.data);
       setRefreshing(false);
       if (response && response.meta) {
-        const { current_page, last_page } = response.meta;
-        setLoadMoreButtonVisible(current_page === last_page);
+        const { first_page, current_page, last_page } = response.meta;
+        setPage(current_page);
+
+        setPrevPageButtonHidden(current_page <= first_page);
+        setNextPageButtonHidden(current_page >= last_page);
       }
     });
   };
 
-  const loadMore = () => {
-    setPage(page + 1);
-    fetchMovies();
+  const prevPage = () => {
+    fetchMovies(undefined, page - 1);
+  };
+
+  const nextPage = () => {
+    fetchMovies(undefined, page + 1);
   };
 
   const onChangeSearch = (sq: string) => {
@@ -61,15 +73,6 @@ export default function MovieHomeScreen() {
     setRefreshing(true);
     fetchMovies();
   }, []);
-
-  const personTosubItem = (movies: PersonData[]) => {
-    return _.map(movies, movie => {
-      return {
-        id: movie.id,
-        title: `${movie.first_name} ${movie.last_name}`
-      };
-    });
-  };
 
   return (
     <View style={styles.container}>
@@ -107,15 +110,23 @@ export default function MovieHomeScreen() {
             };
             return <Card key={movie.id.toString()} {...props} />;
           })}
-          <Collapsible collapsed={loadMoreButtonHidden}>
-            <GradientButton
-              icon="plus"
-              label="Add Movie"
-              onPress={loadMore}
-              colors={['#EEEEEE', '#FFFFFF']}
-              labelColor={'#333333'}
-            />
-          </Collapsible>
+          <DefautlView
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-evenly'
+            }}
+          >
+            {!prevPageButtonHidden && (
+              <Button mode="contained" onPress={prevPage}>
+                Previous
+              </Button>
+            )}
+            {!nextPageButtonHidden && (
+              <Button mode="contained" onPress={nextPage}>
+                Next
+              </Button>
+            )}
+          </DefautlView>
         </ScrollView>
       </RoundedContainer>
     </View>
