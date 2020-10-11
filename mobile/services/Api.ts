@@ -24,8 +24,8 @@ type DeletedData = {
 };
 
 //#region Config
-export const API_PROTOCOL = 'http';
-export const API_DOMAIN = '192.168.1.56:3333';
+export const API_PROTOCOL = 'https';
+export const API_DOMAIN = 'mini-movie-database.herokuapp.com';
 
 export const API_URL = `${API_PROTOCOL}://${API_DOMAIN}`;
 //#endregion
