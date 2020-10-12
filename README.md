@@ -1,4 +1,14 @@
 # Mini Movie Database
+An app about movies.🍿🎞️🎬
+
+## About
+This is a shared Github repository for MMDB's back and frontend.
+The backend of the project is deployed and running [online](https://mini-movie-database.herokuapp.com/movies)
+To check the endpoints and documentation, keep scrolling. 🙂
+You will also find a link for the Expo Project and the APK next.
+
+## Used libraries and frameworks
+The backend of the project is an AdonisJS application.
 
 ## Mobile:
 
