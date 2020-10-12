@@ -1,12 +1,13 @@
 # Mini Movie Database
 
-## Expo Project page:
+## Mobile:
 
-https://expo.io/@bisk8s/MMDB
+- [Expo Project](https://expo.io/@bisk8s/MMDB)
+- [APK](https://drive.google.com/file/d/1bqCr-p4Z3TY1Cl7EAl76RgD9DrE68APJ/view?usp=drivesdk)
 
-## API URL:
-
-API Home: https://mini-movie-database.herokuapp.com/
+## API:
+### URL
+`https://mini-movie-database.herokuapp.com/`
 
 ### Endpoints
 
