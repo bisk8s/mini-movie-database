@@ -8,7 +8,12 @@ To check the endpoints and documentation, keep scrolling. 🙂
 You will also find a link for the Expo Project and the APK next.
 
 ## Used libraries and frameworks
-The backend of the project is an AdonisJS application.
+The backend of the project is an [AdonisJS](https://preview.adonisjs.com/blog/introducing-adonisjs-v5/) application.
+AdonisJs is a Node.js MVC framework. It offers a stable ecosystem to write server-side web applications. And it also supports TypeScript.
+
+When checking the Expo project you may also see that I've chosen to use [React Native Paper](https://callstack.github.io/react-native-paper/).
+Paper is a collection of customizable and production-ready components, following Google’s Material Design guidelines. It adds a lot when the subject is style.
+
 
 ## Mobile:
 
