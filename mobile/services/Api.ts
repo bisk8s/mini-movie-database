@@ -416,7 +416,7 @@ export async function editMovie(
 
   const data = getFormData(form);
   const options: RequestInit = {
-    method: 'POST',
+    method: 'PUT',
     body: data,
     headers: {
       authorization: `Bearer ${token}`
