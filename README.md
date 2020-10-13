@@ -24,6 +24,10 @@ Paper is a collection of customizable and production-ready components, following
 
 ## API:
 
+Safe methods are publicly available, no authentication is required (GET).
+Unsafe methods are only available to authenticated users. (POST/PUT/UPDATE/DELETE)
+Authentication is token based.
+
 ### URL
 
 `https://mini-movie-database.herokuapp.com/`
@@ -55,13 +59,13 @@ type UserData={
 
 #### PERSON
 
-| Method | Path      | Attr.                                                                                                                                                                         | Return                 |
-| ------ | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
-| GET    | `/people` | `searchQuery: string, page: number`                                                                                                                                           | `p:PeopleResponseData` |
-| GET    | `/person` | `id:number`                                                                                                                                                                   | `p:PersonData`         |
-| POST   | `/person` | `firstName: string, lastName: string, aliases: string, token: string, moviesAsActor?: MovieData[], moviesAsProducer?: MovieData[], moviesAsDirector?: MovieData[]`            | `p:PersonData`         |
-| PUT    | `/person` | `id:number, firstName: string, lastName: string, aliases: string, token: string, moviesAsActor?: MovieData[], moviesAsProducer?: MovieData[], moviesAsDirector?: MovieData[]` | `p:PersonData`         |
-| DELETE | `/person` | `id:number`                                                                                                                                                                   | `d:DeletedData`        |
+| Method | Path      | Attr.                                                                                                                                           | Return                 |
+| ------ | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
+| GET    | `/people` | `searchQuery: string, page: number`                                                                                                             | `p:PeopleResponseData` |
+| GET    | `/person` | `id:number`                                                                                                                                     | `p:PersonData`         |
+| POST   | `/person` | `firstName: string, lastName: string, aliases: string, moviesAsActor?: string, moviesAsProducer?: string, moviesAsDirector?: string`            | `p:PersonData`         |
+| PUT    | `/person` | `id:number, firstName: string, lastName: string, aliases: string, moviesAsActor?: string, moviesAsProducer?: string, moviesAsDirector?: string` | `p:PersonData`         |
+| DELETE | `/person` | `id:number`                                                                                                                                     | `d:DeletedData`        |
 
 #### Types
 
@@ -96,13 +100,13 @@ type PersonData = {
 
 #### MOVIE
 
-| Method | Path      | Attr.                                                                                                                           | Return                 |
-| ------ | --------- | ------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
-| GET    | `/movies` | `searchQuery: string, page: number`                                                                                             | `m:PeopleResponseData` |
-| GET    | `/movie`  | `id:number`                                                                                                                     | `m:MovieData`          |
-| POST   | `/movie`  | `title: string, releaseYear: number, token: string, casting?: PersonData[], producers?: PersonData[], directors?: PersonData[]` | `m:MovieData`          |
-| PUT    | `/movie`  | `title: string, releaseYear: number, token: string, casting?: PersonData[], producers?: PersonData[], directors?: PersonData[]` | `m:MovieData`          |
-| DELETE | `/movie`  | `id:number`                                                                                                                     | `d:deletedData`        |
+| Method | Path      | Attr.                                                                                          | Return                 |
+| ------ | --------- | ---------------------------------------------------------------------------------------------- | ---------------------- |
+| GET    | `/movies` | `searchQuery: string, page: number`                                                            | `m:PeopleResponseData` |
+| GET    | `/movie`  | `id:number`                                                                                    | `m:MovieData`          |
+| POST   | `/movie`  | `title: string, releaseYear: number, casting?: string, producers?: string, directors?: string` | `m:MovieData`          |
+| PUT    | `/movie`  | `title: string, releaseYear: number, casting?: string, producers?: string, directors?: string` | `m:MovieData`          |
+| DELETE | `/movie`  | `id:number`                                                                                    | `d:deletedData`        |
 
 #### Types
 
