@@ -101,11 +101,11 @@ export default function MovieDetailScreen({ route }: ScreenProps) {
           <Divider />
 
           <Paragraph>Producers</Paragraph>
-          <People type="directors" />
+          <People type="producers" />
           <Divider />
 
           <Paragraph>Directors</Paragraph>
-          <People type="producers" />
+          <People type="directors" />
           <Divider />
 
           <Collapsible collapsed={authAreaHidden}>
