@@ -12,6 +12,7 @@ import { getPerson, PersonData, removePerson } from '../services/Api';
 import _ from 'lodash';
 import { Button, Chip, Dialog, Divider, Paragraph, Portal, Title } from 'react-native-paper';
 import Collapsible from 'react-native-collapsible';
+import PageContainer from '../components/PageContainer';
 
 type ScreenProps = {
   route: RouteProp<PersonTabParamList, 'PersonDetail'>;
@@ -76,7 +77,7 @@ export default function PersonDetailScreen({ route }: ScreenProps) {
   };
 
   return (
-    <View style={styles.container}>
+    <PageContainer>
       <AppbarHeader title={person ? `${person?.first_name} ${person?.last_name}` : ''} goBack={navigation.goBack} />
       <RoundedContainer>
         <ScrollView>
@@ -129,7 +130,7 @@ export default function PersonDetailScreen({ route }: ScreenProps) {
           </Dialog.Actions>
         </Dialog>
       </Portal>
-    </View>
+    </PageContainer>
   );
 }
 

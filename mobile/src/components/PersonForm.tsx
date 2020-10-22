@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { StyleSheet, View as DefaultView } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Chip, Menu, TextInput } from 'react-native-paper';
 import _ from 'lodash';
 
-import { Spacer } from '../components/Themed';
+import { Spacer } from '../components/Spacer';
 
 import { getPeople, PersonData, removeRelationship } from '../services/Api';
 import { rspHeight } from '../utils/Responsive';
@@ -47,7 +47,7 @@ export function PersonForm({ label, selectedPeople, setSelectedPeople, type }: P
   };
 
   return (
-    <DefaultView>
+    <View>
       <Menu
         visible={visible}
         onDismiss={closeMenu}
@@ -73,13 +73,13 @@ export function PersonForm({ label, selectedPeople, setSelectedPeople, type }: P
         })}
       </Menu>
       <Spacer />
-      <DefaultView
+      <View
         style={{
           flexDirection: 'row',
           justifyContent: 'space-evenly'
         }}
       >
-        <DefaultView style={styles.chipsView}>
+        <View style={styles.chipsView}>
           {_.map(selectedPeople, person => {
             return (
               <Chip key={person.id} onPress={() => onChipPress(person)} style={styles.chipStyle} icon="close">
@@ -87,9 +87,9 @@ export function PersonForm({ label, selectedPeople, setSelectedPeople, type }: P
               </Chip>
             );
           })}
-        </DefaultView>
-      </DefaultView>
-    </DefaultView>
+        </View>
+      </View>
+    </View>
   );
 }
 

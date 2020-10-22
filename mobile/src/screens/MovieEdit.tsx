@@ -3,7 +3,7 @@ import { Alert, StyleSheet, ScrollView, View } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import _ from 'lodash';
 
-import { Spacer } from '../components/Themed';
+import { Spacer } from '../components/Spacer';
 
 import RoundedContainer from '../components/RoundedContainer';
 
@@ -13,6 +13,7 @@ import { editMovie, getMovie, MovieData, PersonData } from '../services/Api';
 import { RouteProp, useNavigation } from '@react-navigation/native';
 import { PersonForm } from '../components/PersonForm';
 import { MovieTabParamList } from '../types';
+import PageContainer from '../components/PageContainer';
 
 type ScreenProps = {
   route: RouteProp<MovieTabParamList, 'MovieEdit'>;
@@ -60,7 +61,7 @@ export default function MovieEditScreen({ route }: ScreenProps) {
   };
 
   return (
-    <View style={styles.container}>
+    <PageContainer>
       <AppbarHeader title={'Edit Movie'} goBack={navigation.goBack} />
       <RoundedContainer style={{ overflow: 'visible' }}>
         <ScrollView>
@@ -94,7 +95,7 @@ export default function MovieEditScreen({ route }: ScreenProps) {
         </ScrollView>
         <Spacer />
       </RoundedContainer>
-    </View>
+    </PageContainer>
   );
 }
 

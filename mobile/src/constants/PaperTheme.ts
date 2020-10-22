@@ -1,5 +1,6 @@
-import { DarkTheme, DefaultTheme as LigthTheme } from 'react-native-paper';
+import { DefaultTheme } from 'react-native-paper';
 import { Theme } from 'react-native-paper/lib/typescript/src/types';
+import Colors from './Colors';
 
 const fontConfig = {
   regular: {
@@ -23,26 +24,15 @@ const fontConfig = {
 export const roundness = 7;
 
 export const DefaultPaperTheme = {
-  ...LigthTheme,
+  ...DefaultTheme,
   fonts: fontConfig,
   roundness,
   colors: {
-    ...LigthTheme.colors,
-    primary: '#43BAEA',
-    accent: '#7C7C7C',
-    background: '#FFFFFF',
-    borderColor: '#FFFFFF'
-  }
-} as Theme;
-
-export const AlternativeTheme = {
-  ...DarkTheme,
-  fonts: fontConfig,
-  roundness,
-  colors: {
-    ...DarkTheme.colors,
-    primary: '#7C7C7C',
-    accent: '#1780A3'
+    ...DefaultTheme.colors,
+    primary: Colors.tint,
+    accent: Colors.accent,
+    background: Colors.background,
+    borderColor: Colors.borderColor
   }
 } as Theme;
 

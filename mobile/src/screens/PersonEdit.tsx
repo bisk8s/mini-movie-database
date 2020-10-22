@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Alert, StyleSheet, View, ScrollView } from 'react-native';
 import { TextInput } from 'react-native-paper';
 
-import { Spacer } from '../components/Themed';
+import { Spacer } from '../components/Spacer';
 
 import RoundedContainer from '../components/RoundedContainer';
 
@@ -12,6 +12,7 @@ import { RouteProp, useNavigation } from '@react-navigation/native';
 import { editPerson, getPerson, MovieData } from '../services/Api';
 import { MovieForm } from '../components/MovieForm';
 import { PersonTabParamList } from '../types';
+import PageContainer from '../components/PageContainer';
 
 type ScreenProps = {
   route: RouteProp<PersonTabParamList, 'PersonEdit'>;
@@ -35,9 +36,9 @@ export default function PersonEditScreen({ route }: ScreenProps) {
         setLastName(person.last_name);
         setAliases(person.aliases.join(', '));
 
-        person.moviesAsActor && setMoviesAsActor(person.moviesAsActor);
-        person.moviesAsProducer && setMoviesAsProducer(person.moviesAsProducer);
-        person.moviesAsDirector && setMoviesAsDirector(person.moviesAsDirector);
+        if (person.moviesAsActor) setMoviesAsActor(person.moviesAsActor);
+        if (person.moviesAsProducer) setMoviesAsProducer(person.moviesAsProducer);
+        if (person.moviesAsDirector) setMoviesAsDirector(person.moviesAsDirector);
       }
     });
   }, []);
@@ -65,7 +66,7 @@ export default function PersonEditScreen({ route }: ScreenProps) {
   };
 
   return (
-    <View style={styles.container}>
+    <PageContainer>
       <AppbarHeader title={'Edit Person'} goBack={navigation.goBack} />
       <RoundedContainer style={{ overflow: 'visible' }}>
         <ScrollView>
@@ -115,7 +116,7 @@ export default function PersonEditScreen({ route }: ScreenProps) {
           />
         </ScrollView>
       </RoundedContainer>
-    </View>
+    </PageContainer>
   );
 }
 

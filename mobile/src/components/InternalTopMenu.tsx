@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { IconButton, Menu } from 'react-native-paper';
 import { View, StyleSheet } from 'react-native';
 import Constants from 'expo-constants';
-
-import { rspWidth } from '../utils/Responsive';
-import { RootStackParamList } from '../types';
 import { StackNavigationProp } from '@react-navigation/stack';
 
-export default function InternalMenu({ navigation }: { navigation: StackNavigationProp<RootStackParamList> }) {
+import Colors from '../constants/Colors';
+import { rspWidth } from '../utils/Responsive';
+import { RootStackParamList } from '../types';
+
+export default function InternalTopMenu({ navigation }: { navigation: StackNavigationProp<RootStackParamList> }) {
   const [visible, setVisible] = useState(false);
   const [authAreaHidden, setAuthAreaHidden] = useState(true);
 
@@ -50,12 +51,12 @@ export default function InternalMenu({ navigation }: { navigation: StackNavigati
   };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.wrapper}>
       <View style={styles.header}>
         <Menu
           visible={visible}
           onDismiss={closeMenu}
-          anchor={<IconButton icon="menu" color={'#FFF'} size={rspWidth(68)} onPress={openMenu} />}
+          anchor={<IconButton icon="menu" color={Colors.text} size={rspWidth(68)} onPress={openMenu} />}
         >
           {authAreaHidden && (
             <>
@@ -71,20 +72,21 @@ export default function InternalMenu({ navigation }: { navigation: StackNavigati
 }
 
 const styles = StyleSheet.create({
-  container: {
-    alignItems: 'flex-end'
+  wrapper: {
+    alignItems: 'flex-end',
+    backgroundColor: Colors.background
   },
   border: {
     width: rspWidth(188),
     height: rspWidth(188),
 
-    borderColor: '#027391',
-    backgroundColor: '#fff',
+    borderColor: Colors.tint,
+    backgroundColor: Colors.background,
 
     borderRadius: rspWidth(188),
     borderWidth: rspWidth(6)
   },
-  title: { color: '#027391' },
+  title: { color: Colors.tint },
 
   header: {
     marginTop: Constants.statusBarHeight,

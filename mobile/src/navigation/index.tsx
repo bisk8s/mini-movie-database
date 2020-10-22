@@ -12,10 +12,7 @@ export default function Navigation() {
   const rnPaperTheme = DefaultPaperTheme;
   return (
     <Provider theme={rnPaperTheme}>
-      <NavigationContainer
-        linking={LinkingConfiguration}
-        theme={navigatorTheme}
-      >
+      <NavigationContainer linking={LinkingConfiguration} theme={navigatorTheme}>
         <RootNavigator />
       </NavigationContainer>
     </Provider>

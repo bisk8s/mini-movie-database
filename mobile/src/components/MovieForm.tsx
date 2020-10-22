@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { StyleSheet, View as DefaultView } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Chip, Menu, TextInput } from 'react-native-paper';
 import _ from 'lodash';
 
-import { Spacer } from '../components/Themed';
+import { Spacer } from '../components/Spacer';
 
 import { getMovies, MovieData, removeRelationship } from '../services/Api';
 import { rspHeight } from '../utils/Responsive';
@@ -47,7 +47,7 @@ export function MovieForm({ label, selectedMovies, setSelectedMovies, type }: Mo
   };
 
   return (
-    <DefaultView>
+    <View>
       <Menu
         visible={visible}
         onDismiss={closeMenu}
@@ -73,13 +73,13 @@ export function MovieForm({ label, selectedMovies, setSelectedMovies, type }: Mo
         })}
       </Menu>
       <Spacer />
-      <DefaultView
+      <View
         style={{
           flexDirection: 'row',
           justifyContent: 'space-evenly'
         }}
       >
-        <DefaultView style={styles.chipsView}>
+        <View style={styles.chipsView}>
           {_.map(selectedMovies, movie => {
             return (
               <Chip key={movie.id} onPress={() => onChipPress(movie)} icon="close">
@@ -87,9 +87,9 @@ export function MovieForm({ label, selectedMovies, setSelectedMovies, type }: Mo
               </Chip>
             );
           })}
-        </DefaultView>
-      </DefaultView>
-    </DefaultView>
+        </View>
+      </View>
+    </View>
   );
 }
 

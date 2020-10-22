@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Alert, StyleSheet, View, ScrollView } from 'react-native';
 import { TextInput } from 'react-native-paper';
 
-import { Spacer } from '../components/Themed';
+import { Spacer } from '../components/Spacer';
 
 import RoundedContainer from '../components/RoundedContainer';
 
@@ -11,6 +11,7 @@ import GradientButton from '../components/GradientButton';
 import { useNavigation } from '@react-navigation/native';
 import { addPerson, MovieData } from '../services/Api';
 import { MovieForm } from '../components/MovieForm';
+import PageContainer from '../components/PageContainer';
 
 export default function AddScreen() {
   const navigation = useNavigation();
@@ -44,7 +45,7 @@ export default function AddScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <PageContainer>
       <AppbarHeader title={'Add Person'} goBack={navigation.goBack} />
       <RoundedContainer style={{ overflow: 'visible' }}>
         <ScrollView>
@@ -94,7 +95,7 @@ export default function AddScreen() {
           />
         </ScrollView>
       </RoundedContainer>
-    </View>
+    </PageContainer>
   );
 }
 

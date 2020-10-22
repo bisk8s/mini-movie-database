@@ -3,12 +3,12 @@ import React, { useState } from 'react';
 import { StyleSheet, Dimensions, View } from 'react-native';
 import { Button } from 'react-native-paper';
 
-import { TextInput } from '../components/Themed';
+import { TextInput } from '../components/TextInput';
 import { rspHeight } from '../utils/Responsive';
-import Logo from '../components/Logo';
 import { addUser } from '../services/Api';
 import LocalStorage from '../services/LocalStorage';
 import { useNavigation } from '@react-navigation/native';
+import PageContainer from '../components/PageContainer';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -35,9 +35,8 @@ export default function UserAddScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <PageContainer>
       <View style={styles.form}>
-        <Logo />
         <View style={styles.spacerLarger} />
         <TextInput
           style={styles.textInput}
@@ -56,23 +55,15 @@ export default function UserAddScreen() {
           secureTextEntry
         />
         <View style={styles.spacer2x} />
-        <Button
-          mode="contained"
-          labelStyle={styles.loginButtonLabel}
-          onPress={onPressAddButton}
-        >
+        <Button mode="contained" labelStyle={styles.loginButtonLabel} onPress={onPressAddButton}>
           Sing Up
         </Button>
         <View style={styles.spacer} />
-        <Button
-          mode="outlined"
-          labelStyle={styles.loginButtonLabel}
-          onPress={onPressBackButton}
-        >
+        <Button mode="contained" labelStyle={styles.loginButtonLabel} onPress={onPressBackButton}>
           Back
         </Button>
       </View>
-    </View>
+    </PageContainer>
   );
 }
 

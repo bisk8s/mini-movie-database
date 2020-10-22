@@ -3,13 +3,13 @@ import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
 import { Button } from 'react-native-paper';
 
-import { TextInput } from '../components/Themed';
+import { TextInput } from '../components/TextInput';
 import { rspHeight } from '../utils/Responsive';
-import Logo from '../components/Logo';
 
 import { getToken } from '../services/Api';
 import LocalStorage from '../services/LocalStorage';
 import { useNavigation } from '@react-navigation/native';
+import PageContainer from '../components/PageContainer';
 
 const { width, height } = Dimensions.get('screen');
 export default function LoginScreen() {
@@ -31,7 +31,6 @@ export default function LoginScreen() {
   const onPressLoginButton = async () => {
     const token = await getToken(email, password);
     if (token) {
-      // Globals.token = token;
       navigation.navigate('Internal');
     }
   };
@@ -41,9 +40,8 @@ export default function LoginScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <PageContainer>
       <View style={styles.form}>
-        <Logo />
         <View style={styles.spacerLarger} />
         <TextInput
           style={styles.textInput}
@@ -66,11 +64,11 @@ export default function LoginScreen() {
           Login
         </Button>
         <View style={styles.spacer} />
-        <Button mode="outlined" labelStyle={styles.loginButtonLabel} onPress={onPressBackButton}>
+        <Button mode="contained" labelStyle={styles.loginButtonLabel} onPress={onPressBackButton}>
           Back
         </Button>
       </View>
-    </View>
+    </PageContainer>
   );
 }
 

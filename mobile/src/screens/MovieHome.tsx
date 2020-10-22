@@ -14,6 +14,7 @@ import AppbarHeader from '../components/AppbarHeader';
 import Collapsible from 'react-native-collapsible';
 import { MovieData, getMovies } from '../services/Api';
 import { useNavigation } from '@react-navigation/native';
+import PageContainer from '../components/PageContainer';
 
 export default function MovieHomeScreen() {
   const navigation = useNavigation();
@@ -70,7 +71,7 @@ export default function MovieHomeScreen() {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <PageContainer>
       <AppbarHeader title={'Movies'} />
       <RoundedContainer>
         <ScrollView
@@ -122,7 +123,7 @@ export default function MovieHomeScreen() {
           </View>
         </ScrollView>
       </RoundedContainer>
-    </View>
+    </PageContainer>
   );
 }
 

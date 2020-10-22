@@ -12,6 +12,7 @@ import { getMovie, MovieData, removeMovie } from '../services/Api';
 import Collapsible from 'react-native-collapsible';
 import { Button, Chip, Dialog, Divider, Paragraph, Portal, Title } from 'react-native-paper';
 import _ from 'lodash';
+import PageContainer from '../components/PageContainer';
 
 type ScreenProps = {
   route: RouteProp<MovieTabParamList, 'MovieDetail'>;
@@ -71,7 +72,7 @@ export default function MovieDetailScreen({ route }: ScreenProps) {
   };
 
   return (
-    <View style={styles.container}>
+    <PageContainer>
       <AppbarHeader title={movie ? `${movie.title} (${movie.release_year})` : ''} goBack={navigation.goBack} />
       <RoundedContainer>
         <ScrollView>
@@ -129,7 +130,7 @@ export default function MovieDetailScreen({ route }: ScreenProps) {
           </Dialog.Actions>
         </Dialog>
       </Portal>
-    </View>
+    </PageContainer>
   );
 }
 

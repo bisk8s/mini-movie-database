@@ -17,10 +17,7 @@ export function PersonTabStackNavigator() {
   return (
     <StackNavigator.Navigator screenOptions={{ headerShown: false }}>
       <StackNavigator.Screen name="PersonHome" component={PersonHomeScreen} />
-      <StackNavigator.Screen
-        name="PersonDetail"
-        component={PersonDetailScreen}
-      />
+      <StackNavigator.Screen name="PersonDetail" component={PersonDetailScreen} />
       <StackNavigator.Screen name="PersonAdd" component={PersonAddScreen} />
       <StackNavigator.Screen name="PersonEdit" component={PersonEditScreen} />
     </StackNavigator.Navigator>

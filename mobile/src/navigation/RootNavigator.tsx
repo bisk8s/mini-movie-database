@@ -16,11 +16,7 @@ export default function RootNavigator() {
       <Stack.Screen name="Internal" component={BottomTabNavigator} />
       <Stack.Screen name="UserAdd" component={UserAddScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />
-      <Stack.Screen
-        name="NotFound"
-        component={NotFoundScreen}
-        options={{ headerShown: true, title: 'Oops!' }}
-      />
+      <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ headerShown: true, title: 'Oops!' }} />
     </Stack.Navigator>
   );
 }

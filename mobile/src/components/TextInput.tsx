@@ -31,7 +31,3 @@ export function TextInput(props: TextInputProps) {
     </View>
   );
 }
-
-export function Spacer({ height = 12 }) {
-  return <View style={{ height }} />;
-}

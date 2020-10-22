@@ -13,6 +13,7 @@ import AppbarHeader from '../components/AppbarHeader';
 import { rspHeight } from '../utils/Responsive';
 import { PersonTabParamList } from '../types';
 import { getPeople, MovieData, PersonData } from '../services/Api';
+import PageContainer from '../components/PageContainer';
 
 type PersonHomeScreenProps = {
   route: RouteProp<PersonTabParamList, 'PersonHome'>;
@@ -33,14 +34,13 @@ export default function PersonHomeScreen({ route }: PersonHomeScreenProps) {
 
     const person = _.get(route, ['params', 'person']);
     if (person !== undefined) {
-      console.log('person:', person.first_name);
       navigation.navigate('PersonDetail', { person });
     }
   }, []);
 
   const fetchPeople = async (sq?: string, p?: number) => {
-    const { token } = Globals;
-    setAuthAreaHidden(!(token && token.length > 0));
+    // const { token } = Globals;
+    // setAuthAreaHidden(!(token && token.length > 0));
 
     const query = sq !== undefined ? sq : searchQuery;
     getPeople(query, p || page).then(response => {
@@ -77,7 +77,7 @@ export default function PersonHomeScreen({ route }: PersonHomeScreenProps) {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <PageContainer>
       <AppbarHeader title={'People'} />
       <RoundedContainer>
         <ScrollView
@@ -103,7 +103,7 @@ export default function PersonHomeScreen({ route }: PersonHomeScreenProps) {
             />
           </Collapsible>
           {_.map(people, (person, key) => {
-            let props: CardProps = {
+            const props: CardProps = {
               title: `${person.first_name} ${person.last_name}`,
               subtitle: person.aliases.join(),
               onPress: () => navigation.navigate('PersonDetail', { person })
@@ -130,7 +130,7 @@ export default function PersonHomeScreen({ route }: PersonHomeScreenProps) {
           </View>
         </ScrollView>
       </RoundedContainer>
-    </View>
+    </PageContainer>
   );
 }
 

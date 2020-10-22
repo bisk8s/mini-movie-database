@@ -3,15 +3,12 @@ import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { get } from 'lodash';
 
-import {
-  createMaterialTopTabNavigator,
-  MaterialTopTabBarOptions
-} from '@react-navigation/material-top-tabs';
+import { createMaterialTopTabNavigator, MaterialTopTabBarOptions } from '@react-navigation/material-top-tabs';
 import { StackScreenProps } from '@react-navigation/stack';
 
 import { BottomTabParamList, RootStackParamList } from '../types';
 
-import InternalMenu from '../components/InternalMenu';
+import InternalTopMenu from '../components/InternalTopMenu';
 
 import { PersonTabStackNavigator } from './PersonTabStackNavigator';
 import { MovieTabStackNavigator } from './MovieTabStackNavigator';
@@ -30,14 +27,7 @@ type TabBarItemProps = {
   badge?: string;
   onPress: () => void;
 };
-function TabBarItem({
-  ikey,
-  label,
-  icon,
-  badge,
-  isFocused,
-  onPress
-}: TabBarItemProps) {
+function TabBarItem({ ikey, label, icon, badge, isFocused, onPress }: TabBarItemProps) {
   const key = ikey;
 
   return (
@@ -54,9 +44,7 @@ function TabBarItem({
 
         marginHorizontal: rspWidth(10),
 
-        backgroundColor: isFocused
-          ? Colors.tabActiveBackgroundColor
-          : Colors.tabInactiveBackgroundColor
+        backgroundColor: isFocused ? Colors.tabActiveBackgroundColor : Colors.tabInactiveBackgroundColor
       }}
     >
       <View
@@ -90,9 +78,7 @@ function TabBarItem({
   );
 }
 
-export default function BottomTabNavigator({
-  navigation
-}: StackScreenProps<RootStackParamList>) {
+export default function BottomTabNavigator({ navigation }: StackScreenProps<RootStackParamList>) {
   const tabBarOptions: MaterialTopTabBarOptions = {
     renderIndicator: () => null,
     renderTabBarItem: props => {
@@ -105,25 +91,9 @@ export default function BottomTabNavigator({
       switch (name) {
         default:
         case 'MovieTab':
-          return (
-            <TabBarItem
-              ikey={props.key}
-              label="Movies"
-              isFocused={isFocused}
-              icon="ios-film"
-              {...props}
-            />
-          );
+          return <TabBarItem ikey={props.key} label="Movies" isFocused={isFocused} icon="ios-film" {...props} />;
         case 'PersonTab':
-          return (
-            <TabBarItem
-              ikey={props.key}
-              label="People"
-              isFocused={isFocused}
-              icon="ios-people"
-              {...props}
-            />
-          );
+          return <TabBarItem ikey={props.key} label="People" isFocused={isFocused} icon="ios-people" {...props} />;
       }
     },
     style: {
@@ -136,14 +106,9 @@ export default function BottomTabNavigator({
   };
 
   return (
-    <View style={styles.container}>
-      <InternalMenu navigation={navigation} />
-      <Tab.Navigator
-        swipeEnabled
-        tabBarPosition="bottom"
-        initialRouteName="MovieTab"
-        tabBarOptions={tabBarOptions}
-      >
+    <View style={styles.wrapper}>
+      <InternalTopMenu navigation={navigation} />
+      <Tab.Navigator swipeEnabled tabBarPosition="bottom" initialRouteName="MovieTab" tabBarOptions={tabBarOptions}>
         <Tab.Screen name="MovieTab" component={MovieTabStackNavigator} />
         <Tab.Screen name="PersonTab" component={PersonTabStackNavigator} />
       </Tab.Navigator>
@@ -152,7 +117,7 @@ export default function BottomTabNavigator({
 }
 
 const styles = StyleSheet.create({
-  container: {
+  wrapper: {
     flex: 1
   }
 });

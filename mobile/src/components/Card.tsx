@@ -12,13 +12,7 @@ export type CardProps = View['props'] & {
   onPress?: () => void;
 };
 
-export default function Card({
-  style,
-  title,
-  subtitle,
-  image,
-  onPress
-}: CardProps) {
+export default function Card({ style, title, subtitle, image, onPress }: CardProps) {
   const LeftContent = (props: any) => {
     if (image) {
       return <Avatar.Image {...props} source={image} />;
@@ -27,9 +21,7 @@ export default function Card({
     }
   };
 
-  const RightContent = (props: any) => (
-    <IconButton {...props} icon="chevron-right" onPress={onPress} />
-  );
+  const RightContent = (props: any) => <IconButton {...props} icon="chevron-right" onPress={onPress} />;
 
   return (
     <>

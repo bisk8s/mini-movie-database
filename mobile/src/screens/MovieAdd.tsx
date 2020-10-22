@@ -3,7 +3,7 @@ import { View, Alert, StyleSheet, ScrollView } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import _ from 'lodash';
 
-import { Spacer } from '../components/Themed';
+import { Spacer } from '../components/Spacer';
 
 import RoundedContainer from '../components/RoundedContainer';
 
@@ -12,6 +12,7 @@ import GradientButton from '../components/GradientButton';
 import { addMovie, PersonData } from '../services/Api';
 import { useNavigation } from '@react-navigation/native';
 import { PersonForm } from '../components/PersonForm';
+import PageContainer from '../components/PageContainer';
 
 export default function MovieAddScreen() {
   const navigation = useNavigation();
@@ -35,7 +36,7 @@ export default function MovieAddScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <PageContainer>
       <AppbarHeader title={'Add Movie'} goBack={navigation.goBack} />
       <RoundedContainer style={{ overflow: 'visible' }}>
         <ScrollView>
@@ -69,7 +70,7 @@ export default function MovieAddScreen() {
         </ScrollView>
         <Spacer />
       </RoundedContainer>
-    </View>
+    </PageContainer>
   );
 }
 
