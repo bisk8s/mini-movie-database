@@ -5,7 +5,7 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "predetox": "sh ./.pretest.sh",
+    "pree2e": "sh ./.pretest.sh",
     "e2e": "detox test --configuration ios.sim",
     "test": "node_modules/.bin/jest test/**/*.spec.js"
   },
