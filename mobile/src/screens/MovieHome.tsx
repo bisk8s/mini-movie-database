@@ -71,7 +71,7 @@ export default function MovieHomeScreen() {
   }, []);
 
   return (
-    <PageContainer>
+    <PageContainer testID="MovieHome">
       <AppbarHeader title={'Movies'} />
       <RoundedContainer>
         <ScrollView
