@@ -5,7 +5,7 @@ describe('Navigation', () => {
     await reloadApp();
   });
 
-  it('should have welcome screen', async () => {
+  it('should start at home screen', async () => {
     await expect(element(by.id('MovieHome'))).toBeVisible();
   });
 });
