@@ -7,7 +7,7 @@ type AppbarHeaderComponentProps = {
   goBack?: () => void;
 };
 
-export default function AppbarHeaderComponent({ title, goBack }: AppbarHeaderComponentProps) {
+export function AppbarHeader({ title, goBack }: AppbarHeaderComponentProps) {
   return (
     <Appbar.Header dark style={styles.appBarHeader}>
       {goBack && <Appbar.BackAction onPress={goBack} />}

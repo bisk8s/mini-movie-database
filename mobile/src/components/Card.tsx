@@ -12,7 +12,7 @@ export type CardProps = View['props'] & {
   onPress?: () => void;
 };
 
-export default function Card({ style, title, subtitle, image, onPress }: CardProps) {
+export function Card({ style, title, subtitle, image, onPress }: CardProps) {
   const LeftContent = (props: any) => {
     if (image) {
       return <Avatar.Image {...props} source={image} />;

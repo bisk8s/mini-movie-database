@@ -15,7 +15,7 @@ type GradientButtonProps = View['props'] & {
   onPress?: () => void;
 };
 
-export default function GradientButton({ style, icon, label, colors, labelColor, onPress }: GradientButtonProps) {
+export function GradientButton({ icon, label, colors, labelColor, onPress }: GradientButtonProps) {
   return (
     <TouchableOpacity onPress={onPress}>
       <Surface style={styles.buttonWrapper}>

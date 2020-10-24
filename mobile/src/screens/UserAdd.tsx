@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
-
-import { StyleSheet, Dimensions, View } from 'react-native';
 import { Button } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
+import { StyleSheet, Dimensions, View } from 'react-native';
 
-import { TextInput } from '../components/TextInput';
 import { rspHeight } from '../utils/Responsive';
 import { addUser } from '../services/Api';
 import LocalStorage from '../services/LocalStorage';
-import { useNavigation } from '@react-navigation/native';
-import PageContainer from '../components/PageContainer';
+
+import { TextInput, PageContainer } from '../components';
 
 const { width, height } = Dimensions.get('screen');
 

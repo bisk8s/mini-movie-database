@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { Chip, Menu, TextInput } from 'react-native-paper';
 import _ from 'lodash';
 
-import { Spacer } from '../components/Spacer';
+import { Spacer } from '../components';
 
 import { getPeople, PersonData, removeRelationship } from '../services/Api';
 import { rspHeight } from '../utils/Responsive';

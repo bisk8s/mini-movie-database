@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-
-import RoundedContainer from '../components/RoundedContainer';
-import AppbarHeader from '../components/AppbarHeader';
-import { rspHeight } from '../utils/Responsive';
+import { Button, Chip, Dialog, Divider, Paragraph, Portal, Title } from 'react-native-paper';
+import { RouteProp, useNavigation } from '@react-navigation/native';
+import Collapsible from 'react-native-collapsible';
+import _ from 'lodash';
 
 import { PersonTabParamList } from '../types';
-import OptionButton from '../components/OptionButton';
-import { RouteProp, useNavigation } from '@react-navigation/native';
 import { getPerson, PersonData, removePerson } from '../services/Api';
-import _ from 'lodash';
-import { Button, Chip, Dialog, Divider, Paragraph, Portal, Title } from 'react-native-paper';
-import Collapsible from 'react-native-collapsible';
-import PageContainer from '../components/PageContainer';
+import { rspHeight } from '../utils/Responsive';
+
+import { RoundedContainer, AppbarHeader, OptionButton, PageContainer } from '../components';
 
 type ScreenProps = {
   route: RouteProp<PersonTabParamList, 'PersonDetail'>;

@@ -5,7 +5,7 @@ import { Provider } from 'react-native-paper';
 import { DefaultPaperTheme } from '../constants/PaperTheme';
 
 import LinkingConfiguration from './LinkingConfiguration';
-import RootNavigator from './RootNavigator';
+import RootNavigator from './navigators';
 
 export default function Navigation() {
   const navigatorTheme = DefaultTheme;

@@ -11,8 +11,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background
   }
 });
-const PageContainer = styled(View)`
+export const PageContainer = styled(View)`
   ${styles.container}
 `;
-
-export default PageContainer;

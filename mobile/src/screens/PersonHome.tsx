@@ -5,15 +5,11 @@ import Collapsible from 'react-native-collapsible';
 import { RouteProp, useNavigation } from '@react-navigation/native';
 import _ from 'lodash';
 
-import RoundedContainer from '../components/RoundedContainer';
-import GradientButton from '../components/GradientButton';
-import Card, { CardProps } from '../components/Card';
-import AppbarHeader from '../components/AppbarHeader';
-
 import { rspHeight } from '../utils/Responsive';
 import { PersonTabParamList } from '../types';
 import { getPeople, MovieData, PersonData } from '../services/Api';
-import PageContainer from '../components/PageContainer';
+
+import { RoundedContainer, GradientButton, Card, CardProps, AppbarHeader, PageContainer } from '../components';
 
 type PersonHomeScreenProps = {
   route: RouteProp<PersonTabParamList, 'PersonHome'>;

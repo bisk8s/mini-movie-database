@@ -1,12 +1,12 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import MovieHomeScreen from '../screens/MovieHome';
-import MovieDetailScreen from '../screens/MovieDetail';
-import MovieAddScreen from '../screens/MovieAdd';
-import MovieEditScreen from '../screens/MovieEdit';
+import MovieAddScreen from '../../screens/MovieAdd';
+import MovieDetailScreen from '../../screens/MovieDetail';
+import MovieEditScreen from '../../screens/MovieEdit';
+import MovieHomeScreen from '../../screens/MovieHome';
 
-import { MovieTabParamList } from '../types';
+import { MovieTabParamList } from '../../types';
 
 const StackNavigator = createStackNavigator<MovieTabParamList>();
 export function MovieTabStackNavigator() {

@@ -1,15 +1,13 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-
-import PersonHomeScreen from '../screens/PersonHome';
-import PersonDetailScreen from '../screens/PersonDetail';
-
-import { PersonTabParamList } from '../types';
-
-import PersonAddScreen from '../screens/PersonAdd';
-
 import _ from 'lodash';
-import PersonEditScreen from '../screens/PersonEdit';
+
+import { PersonTabParamList } from '../../types';
+
+import PersonAddScreen from '../../screens/PersonAdd';
+import PersonDetailScreen from '../../screens/PersonDetail';
+import PersonEditScreen from '../../screens/PersonEdit';
+import PersonHomeScreen from '../../screens/PersonHome';
 
 const StackNavigator = createStackNavigator<PersonTabParamList>();
 

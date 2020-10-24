@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { Chip, Menu, TextInput } from 'react-native-paper';
 import _ from 'lodash';
 
-import { Spacer } from '../components/Spacer';
+import { Spacer } from '../components';
 
 import { getMovies, MovieData, removeRelationship } from '../services/Api';
 import { rspHeight } from '../utils/Responsive';
@@ -17,12 +17,12 @@ type MovieFormProps = {
 export function MovieForm({ label, selectedMovies, setSelectedMovies, type }: MovieFormProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [visible, setVisible] = useState(false);
-  const [people, setPeople] = useState<MovieData[]>([]);
+  const [movies, setMovies] = useState<MovieData[]>([]);
 
   const fetchMovie = async () => {
     getMovies(searchQuery, 1).then(response => {
       if (response) {
-        setPeople(response.data);
+        setMovies(response.data);
       }
     });
   };
@@ -62,7 +62,7 @@ export function MovieForm({ label, selectedMovies, setSelectedMovies, type }: Mo
         }
         style={{ marginTop: rspHeight(190) }}
       >
-        {_.map(people, movie => {
+        {_.map(movies, movie => {
           return (
             <Menu.Item
               key={movie.id}

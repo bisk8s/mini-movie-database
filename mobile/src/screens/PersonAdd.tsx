@@ -1,17 +1,11 @@
 import React, { useState } from 'react';
-import { Alert, StyleSheet, View, ScrollView } from 'react-native';
+import { Alert, StyleSheet, ScrollView } from 'react-native';
 import { TextInput } from 'react-native-paper';
-
-import { Spacer } from '../components/Spacer';
-
-import RoundedContainer from '../components/RoundedContainer';
-
-import AppbarHeader from '../components/AppbarHeader';
-import GradientButton from '../components/GradientButton';
 import { useNavigation } from '@react-navigation/native';
+
 import { addPerson, MovieData } from '../services/Api';
-import { MovieForm } from '../components/MovieForm';
-import PageContainer from '../components/PageContainer';
+
+import { RoundedContainer, AppbarHeader, GradientButton, MovieForm, PageContainer, Spacer } from '../components';
 
 export default function AddScreen() {
   const navigation = useNavigation();

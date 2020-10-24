@@ -3,7 +3,7 @@ import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
 
 import deadlinkpng from '../../assets/images/deadlink.png';
-import PageContainer from '../components/PageContainer';
+import { PageContainer } from '../components';
 
 export default function NotFoundScreen() {
   const navigation = useNavigation();

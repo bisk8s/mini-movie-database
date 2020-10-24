@@ -1,32 +1,20 @@
-import React, { useState, useEffect } from 'react';
-
+import React from 'react';
+import { connect } from 'react-redux';
 import { View, StyleSheet, Dimensions } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { Button } from 'react-native-paper';
+import styled from 'styled-components/native';
 
-import { TextInput } from '../components/TextInput';
 import { rspHeight } from '../utils/Responsive';
 
 import { getToken } from '../services/Api';
-import LocalStorage from '../services/LocalStorage';
-import { useNavigation } from '@react-navigation/native';
-import PageContainer from '../components/PageContainer';
 
-const { width, height } = Dimensions.get('screen');
-export default function LoginScreen() {
+import { State } from '../redux/reducers';
+import { TextInput, Spacer, PageContainer, AppbarHeader } from '../components';
+
+function LoginScreen(state: State) {
   const navigation = useNavigation();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
-  const fetchUserInfo = async () => {
-    const user = await LocalStorage.get('email');
-    const pass = await LocalStorage.get('password');
-    setEmail(user);
-    setPassword(pass);
-  };
-
-  useEffect(() => {
-    fetchUserInfo();
-  }, []);
+  const { email, password } = state.session;
 
   const onPressLoginButton = async () => {
     const token = await getToken(email, password);
@@ -41,54 +29,39 @@ export default function LoginScreen() {
 
   return (
     <PageContainer>
-      <View style={styles.form}>
-        <View style={styles.spacerLarger} />
+      <UserForm>
+        <AppbarHeader title="Login" />
+        <Spacer />
         <TextInput
-          style={styles.textInput}
           placeholder="Email"
           value={email}
-          onChangeText={setEmail}
+          // onChangeText={setEmail}
           autoCapitalize="none"
         />
-        <View style={styles.spacer} />
+        <Spacer />
         <TextInput
-          style={styles.textInput}
           placeholder="Password"
           value={password}
-          onChangeText={setPassword}
+          // onChangeText={setPassword}
           autoCapitalize="none"
           secureTextEntry
         />
-        <View style={styles.spacer2x} />
-        <Button mode="contained" labelStyle={styles.loginButtonLabel} onPress={onPressLoginButton}>
-          Login
+        <Spacer />
+        <Button mode="contained" onPress={onPressLoginButton}>
+          Enter
         </Button>
-        <View style={styles.spacer} />
-        <Button mode="contained" labelStyle={styles.loginButtonLabel} onPress={onPressBackButton}>
+        <Spacer />
+        <Button mode="contained" onPress={onPressBackButton}>
           Back
         </Button>
-      </View>
+      </UserForm>
     </PageContainer>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    width,
-    height,
-    justifyContent: 'center'
-  },
   form: {
     paddingHorizontal: rspHeight(40)
-  },
-  spacer: {
-    height: rspHeight(60)
-  },
-  spacer2x: {
-    height: rspHeight(80)
-  },
-  spacerLarger: {
-    height: rspHeight(150)
   },
   loginButtonLabel: {
     lineHeight: rspHeight(130),
@@ -96,8 +69,10 @@ const styles = StyleSheet.create({
     textTransform: 'none',
     fontFamily: 'nunito-light',
     fontSize: rspHeight(38)
-  },
-  textInput: {
-    color: '#FFF'
   }
 });
+const UserForm = styled(View)`
+  ${styles.form}
+`;
+
+export const Login = connect((state: State) => state)(LoginScreen);

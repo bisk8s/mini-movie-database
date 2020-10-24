@@ -8,7 +8,7 @@ import Colors from '../constants/Colors';
 import { rspWidth } from '../utils/Responsive';
 import { RootStackParamList } from '../types';
 
-export default function InternalTopMenu({ navigation }: { navigation: StackNavigationProp<RootStackParamList> }) {
+export function InternalTopMenu({ navigation }: { navigation: StackNavigationProp<RootStackParamList> }) {
   const [visible, setVisible] = useState(false);
   const [authAreaHidden, setAuthAreaHidden] = useState(true);
 

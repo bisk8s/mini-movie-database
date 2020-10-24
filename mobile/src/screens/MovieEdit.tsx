@@ -1,19 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Alert, StyleSheet, ScrollView, View } from 'react-native';
 import { TextInput } from 'react-native-paper';
+import { RouteProp, useNavigation } from '@react-navigation/native';
 import _ from 'lodash';
 
-import { Spacer } from '../components/Spacer';
-
-import RoundedContainer from '../components/RoundedContainer';
-
-import AppbarHeader from '../components/AppbarHeader';
-import GradientButton from '../components/GradientButton';
 import { editMovie, getMovie, MovieData, PersonData } from '../services/Api';
-import { RouteProp, useNavigation } from '@react-navigation/native';
-import { PersonForm } from '../components/PersonForm';
+
 import { MovieTabParamList } from '../types';
-import PageContainer from '../components/PageContainer';
+
+import { AppbarHeader, GradientButton, PageContainer, PersonForm, RoundedContainer, Spacer } from '../components';
 
 type ScreenProps = {
   route: RouteProp<MovieTabParamList, 'MovieEdit'>;

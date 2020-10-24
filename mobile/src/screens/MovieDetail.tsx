@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
+import { RouteProp, useNavigation } from '@react-navigation/native';
+import { Button, Chip, Dialog, Divider, Paragraph, Portal, Title } from 'react-native-paper';
+import Collapsible from 'react-native-collapsible';
+import _ from 'lodash';
 
-import RoundedContainer from '../components/RoundedContainer';
-import AppbarHeader from '../components/AppbarHeader';
+import { getMovie, MovieData, removeMovie } from '../services/Api';
 import { rspHeight } from '../utils/Responsive';
 
 import { MovieTabParamList } from '../types';
-import OptionButton from '../components/OptionButton';
-import { RouteProp, useNavigation } from '@react-navigation/native';
-import { getMovie, MovieData, removeMovie } from '../services/Api';
-import Collapsible from 'react-native-collapsible';
-import { Button, Chip, Dialog, Divider, Paragraph, Portal, Title } from 'react-native-paper';
-import _ from 'lodash';
-import PageContainer from '../components/PageContainer';
+import { OptionButton, RoundedContainer, AppbarHeader, PageContainer } from '../components';
 
 type ScreenProps = {
   route: RouteProp<MovieTabParamList, 'MovieDetail'>;

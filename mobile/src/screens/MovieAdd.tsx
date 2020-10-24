@@ -1,18 +1,13 @@
 import React, { useState } from 'react';
-import { View, Alert, StyleSheet, ScrollView } from 'react-native';
+import { Alert, ScrollView } from 'react-native';
 import { TextInput } from 'react-native-paper';
+import { connect } from 'react-redux';
 import _ from 'lodash';
-
-import { Spacer } from '../components/Spacer';
-
-import RoundedContainer from '../components/RoundedContainer';
-
-import AppbarHeader from '../components/AppbarHeader';
-import GradientButton from '../components/GradientButton';
-import { addMovie, PersonData } from '../services/Api';
 import { useNavigation } from '@react-navigation/native';
-import { PersonForm } from '../components/PersonForm';
-import PageContainer from '../components/PageContainer';
+
+import { addMovie, PersonData } from '../services/Api';
+
+import { Spacer, RoundedContainer, AppbarHeader, GradientButton, PersonForm, PageContainer } from '../components';
 
 export default function MovieAddScreen() {
   const navigation = useNavigation();
@@ -74,8 +69,4 @@ export default function MovieAddScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  }
-});
+export const MovieAdd = connect()(MovieAddScreen);

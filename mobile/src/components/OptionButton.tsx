@@ -13,7 +13,7 @@ type OptionButtonProps = View['props'] & {
   onPress?: () => void;
 };
 
-export default function OptionButton({ style, text, icon, color, small, onPress }: OptionButtonProps) {
+export function OptionButton({ style, text, icon, color, small, onPress }: OptionButtonProps) {
   return (
     <View style={[styles.wrapper, small ? styles.wrapperSmall : null, style]}>
       <Surface style={[styles.surface, small ? styles.surfaceSmall : null, { backgroundColor: color }]}>

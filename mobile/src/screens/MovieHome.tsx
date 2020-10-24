@@ -1,20 +1,14 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { StyleSheet, ScrollView, RefreshControl, View } from 'react-native';
 import { Button, Searchbar } from 'react-native-paper';
-
+import { useNavigation } from '@react-navigation/native';
+import Collapsible from 'react-native-collapsible';
 import _ from 'lodash';
 
 import { rspHeight } from '../utils/Responsive';
-
-import RoundedContainer from '../components/RoundedContainer';
-import GradientButton from '../components/GradientButton';
-import Card, { CardProps } from '../components/Card';
-import AppbarHeader from '../components/AppbarHeader';
-
-import Collapsible from 'react-native-collapsible';
 import { MovieData, getMovies } from '../services/Api';
-import { useNavigation } from '@react-navigation/native';
-import PageContainer from '../components/PageContainer';
+
+import { RoundedContainer, GradientButton, Card, CardProps, AppbarHeader, PageContainer } from '../components';
 
 export default function MovieHomeScreen() {
   const navigation = useNavigation();

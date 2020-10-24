@@ -1,21 +1,21 @@
 import React from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import { get } from 'lodash';
+import { Badge, Text } from 'react-native-paper';
 
+import { Ionicons } from '@expo/vector-icons';
 import { createMaterialTopTabNavigator, MaterialTopTabBarOptions } from '@react-navigation/material-top-tabs';
 import { StackScreenProps } from '@react-navigation/stack';
 
-import { BottomTabParamList, RootStackParamList } from '../types';
+import { rspWidth, rspHeight } from '../../utils/Responsive';
+import { BottomTabParamList, RootStackParamList } from '../../types';
 
-import InternalTopMenu from '../components/InternalTopMenu';
+import { InternalTopMenu } from '../../components';
 
 import { PersonTabStackNavigator } from './PersonTabStackNavigator';
 import { MovieTabStackNavigator } from './MovieTabStackNavigator';
-import { Badge, Text } from 'react-native-paper';
-import { rspWidth, rspHeight } from '../utils/Responsive';
 
-import Colors from '../constants/Colors';
+import Colors from '../../constants/Colors';
 
 const Tab = createMaterialTopTabNavigator<BottomTabParamList>();
 

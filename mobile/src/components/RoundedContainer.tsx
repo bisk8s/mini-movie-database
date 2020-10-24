@@ -5,7 +5,7 @@ import { rspWidth, rspHeight } from '../utils/Responsive';
 
 type RoundedContainerProps = View['props'];
 
-export default function RoundedContainer({ style, children }: RoundedContainerProps) {
+export function RoundedContainer({ style, children }: RoundedContainerProps) {
   return (
     <View style={styles.wrapper}>
       <View style={[styles.internal, style]}>{children}</View>
